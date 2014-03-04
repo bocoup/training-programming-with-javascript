@@ -100,6 +100,14 @@
       });
     });
 
+    describe('#won', function () {
+      it('should return a true if the game is in a winning state', function () {
+        expect(model.won()).to.be.false;
+        model.hits = ['h','a','n','g','m','n'];
+        expect(model.won()).to.be.true;
+      });
+    });
+
     describe('#serialize', function () {
       it('should return a serialized copy of relevant model data for usage by views', function () {
         model.guess('a');
@@ -108,6 +116,7 @@
         expect(serialize.guessWordLetters).to.deep.equal(['h', 'a', 'n', 'g', 'm', 'a', 'n']);
         expect(serialize.hits).to.deep.equal(['a']);
         expect(serialize.misses).to.deep.equal(['b']);
+        expect(serialize.won).to.be.false;
       });
     });
   });

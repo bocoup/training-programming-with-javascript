@@ -31,7 +31,6 @@ body {
 .hangman h1 {
   font-size: 30px;
   text-align: center;
-  padding: 5px 0;
 }
 
 .hangman .canvas {
@@ -71,6 +70,22 @@ body {
   box-shadow: inset 0 0 6px 3px #1657b5
 }
 
+.hangman .won, .hangman .lost {
+  display: none;
+  line-height: 50px;
+  height: 50px;
+  text-align: center;
+  border-radius: 3px;
+}
+
+.hangman .won {
+  background-color: #32bc68;
+}
+
+.hangman .lost {
+  background-color: #bc3332;
+}
+
 .hangman .board {
   position: relative;
   text-align: center;
@@ -91,7 +106,7 @@ body {
   font-size: 28px;
 }
 
-.used {
+.hangman .used {
   background-color: #666;
   border-radius: 3px;
   margin-top: 7px;
@@ -101,7 +116,7 @@ body {
   text-transform: uppercase;
 }
 
-.used .title {
+.hangman .used .title {
   display: block;
   background-color: #555;
   line-height: 30px;

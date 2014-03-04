@@ -81,6 +81,17 @@
       });
     });
 
+    describe('#drawWinOrLose', function () {
+      it('should display a won message if the context says the game won', function () {
+        view.drawWinOrLose({won: true});
+        expect(view.won.css('display')).to.equal('block');
+      });
+      it('should display a lost message if the misses are equal to or greater than the steps possible', function () {
+        view.drawWinOrLose({misses:['a','b','c','d','e','f','g','h']});
+        expect(view.lost.css('display')).to.equal('block');
+      });
+    });
+
     describe('#draw', function () {
       it('should find and draw a requested item on the canvas', function () {
         var gallows = view.gallows();
@@ -177,6 +188,8 @@
         <canvas width="580" height="450"></canvas>
       </div>
       <div class="board"></div>
+      <div class="won" style="display:none">You Won!</div>
+      <div class="lost" style="display:none">You Lost :(</div>
       <div class="input">
         <input type="text" name="guess" class="guess" maxlength="1"><button>Guess a Letter</button>
       </div>

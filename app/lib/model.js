@@ -99,8 +99,22 @@ Hangman.Model.prototype = {
     } else {
       this.misses.push(letter);
     }
-
     return false;
+  },
+
+  /**
+   * Determine if the current state of the game is winning.
+   *
+   * Note: A non-winning game is not necessarily lost.
+   *
+   * @return {Boolean}
+   *   True if each letter in the guessWord exists in
+   *   the hits array, otherwise false.
+   */
+  won: function () {
+    return this.guessWordLetters().every(function (letter) {
+      return this.hits.indexOf(letter) !== -1;
+    }, this);
   },
 
   /**
@@ -115,7 +129,8 @@ Hangman.Model.prototype = {
     return {
       guessWordLetters: this.guessWordLetters(),
       hits: this.hits.slice(),
-      misses: this.misses.slice()
+      misses: this.misses.slice(),
+      won: this.won()
     };
   }
 

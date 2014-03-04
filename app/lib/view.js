@@ -17,6 +17,9 @@ Hangman.View = function (el) {
   this.$el = $el;
   this.canvas = new fabric.Canvas($el.find('canvas').get(0));
   this.board = $el.find('.board');
+  this.input = $el.find('.input');
+  this.won = $el.find('.won');
+  this.lost = $el.find('.lost');
   this.misses = $el.find('.misses');
   this.button = $el.find('button');
   this.guessField = $el.find('.guess');
@@ -41,12 +44,14 @@ Hangman.View.prototype = {
    * Build the game board.
    *
    * @param {Object} context
-   *   @param {Array} context.wordLetters
-   *     the word being guessed, as an array of characters.
+   *   @param {Array} context.guessWordLetters
+   *     The word being guessed, as an array of characters.
    *   @param {Array} context.hits
-   *     the letters which have been guessed so far.
-   *   @param {Array} context.guesses
-   *     the letters which have been guessed so far.
+   *     The matching letters which have been guessed so far.
+   *   @param {Array} context.misses
+   *     The missed letters which have been guessed so far.
+   *   @param {Boolean} context.won
+   *     True or false, depending on if the game has been won.
    */
   refreshBoard: function (context) {
     this.guessField.val('');
@@ -56,6 +61,7 @@ Hangman.View.prototype = {
     this.drawHits(context.guessWordLetters, context.hits);
     this.drawMisses(context.misses);
     this.drawToStep(context.misses.length);
+    this.drawWinOrLose(context);
   },
 
   /**
@@ -93,6 +99,25 @@ Hangman.View.prototype = {
    */
   drawMisses: function (letters) {
     this.misses.html(letters.sort().join(', '));
+    return this;
+  },
+
+  /**
+   * Show a won or lost message depending on the game state.
+   *
+   * @param {context} letters
+   *   The letters to display as being used.
+   * @return {Hangman.View}
+   *   Self for chaining.
+   */
+  drawWinOrLose: function (context) {
+    if (context.won) {
+      this.input.hide();
+      this.won.show();
+    } else if (context.misses.length >= this.steps.length) {
+      this.input.hide();
+      this.lost.show();
+    }
     return this;
   },
 
