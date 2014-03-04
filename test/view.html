@@ -2,101 +2,165 @@
 <html>
 <head>
   <meta charset='utf-8'>
-  <link rel='stylesheet' href='../vendor/mocha/mocha.css'>
-  <script src='../vendor/mocha/expect.js'></script>
-  <script src='../vendor/mocha/mocha.js'></script>
+  <link rel='stylesheet' href='../vendor/test/mocha.css'>
+  <script src='../vendor/test/mocha-1.17.1.js'></script>
+  <script src='../vendor/test/chai-1.9.0.js'></script>
   <script src='../vendor/jquery-2.1.0.js'></script>
   <script src='../vendor/fabric-1.4.4.js'></script>
   <script src='../app/lib/view.js'></script>
   <script src='//localhost:35729/livereload.js'></script>
   <script>
+  var expect = chai.expect;
   mocha.setup('bdd');
   $(mocha.run);
+
   describe('Hangman.View', function() {
-    var view;
+    var view, context;
 
     beforeEach(function () {
-      view = new Hangman.View($('body'));
-    });
-
-    it('should create a fabric.Canvas instance on the first canvas found inside the provided element', function () {
-      expect(view.canvas).to.be.a(fabric.Canvas);
+      view = new Hangman.View($('.hangman'));
+      context = {
+        guessWordLetters: ['h','a','n','g','m','a','n'],
+        hits: ['h'],
+        misses: ['z']
+      }
     });
 
     it('should have a steps property which defines the order of drawings', function () {
       expect(view.steps).to.be.an('array')
     });
 
+    describe('constructor', function () {
+      it('should create a fabric.Canvas instance on the first canvas found inside the provided element', function () {
+        expect(view.canvas).to.be.an.instanceof(fabric.Canvas);
+      });
+    });
+
+    describe('#refreshBoard', function () {
+      it('should clear the guessField', function () {
+        view.guessField.val('a');
+        view.refreshBoard(context);
+        expect(view.guessField.val()).to.equal('');
+      });
+      it('should clear and redraw the misses div', function () {
+        view.misses.html('this should not be here');
+        view.refreshBoard(context);
+        expect(view.misses.html()).to.equal('z');
+      });
+      it('should clear and redraw the canvas', function () {
+        view.draw(view.gallows());
+        view.refreshBoard(context);
+        expect(view.canvas._objects).to.have.length(1);
+      });
+    });
+
+    describe('#drawHits', function () {
+      it('should build text inputs for the game board', function () {
+        view.drawHits(['h','a','n','g','m','a','n'], ['a']);
+        expect(view.board.find('div').length).to.equal(7);
+        expect(view.board.find('div').eq(0).html()).to.equal('&nbsp;');
+        expect(view.board.find('div').eq(1).html()).to.equal('a');
+        expect(view.board.find('div').eq(2).html()).to.equal('&nbsp;');
+        expect(view.board.find('div').eq(3).html()).to.equal('&nbsp;');
+        expect(view.board.find('div').eq(4).html()).to.equal('&nbsp;');
+        expect(view.board.find('div').eq(5).html()).to.equal('a');
+        expect(view.board.find('div').eq(6).html()).to.equal('&nbsp;');
+      });
+      it('should be chainable', function () {
+        expect(view.drawHits(['h','a','n','g','m','a','n'], ['a'])).to.equal(view);
+      });
+    });
+
+    describe('#drawMisses', function () {
+      it('should display alpha-sorted missed letters at the bottom of the board', function () {
+        view.drawMisses(['z','g']);
+        expect(view.misses.html()).to.equal('g, z');
+      });
+      it('should be chainable', function () {
+        expect(view.drawMisses(['z','g'])).to.equal(view);
+      });
+    });
+
     describe('#draw', function () {
       it('should find and draw a requested item on the canvas', function () {
         var gallows = view.gallows();
+        view.canvas.clear();
         view.draw(gallows);
         expect(view.canvas._objects[0]).to.equal(gallows);
       });
       it('should be chainable', function () {
-        expect(view.draw('gallows')).to.equal(view);
-      })
+        expect(view.draw(view.gallows())).to.equal(view);
+      });
     });
 
-    describe('#showLetters', function () {
-      it('should build the text inputs for the game board', function () {
-        view.buildBoard({
-          guessWordLetters: ['h','a','n','g','m','a','n'],
-          hits: ['a'],
-          misses: ['b']
-        });
-
+    describe('#drawStep', function () {
+      it('should draw a step on the canvas as referenced by name', function () {
+        var gallows = view.gallows()
+        view.canvas.clear();
+        view.drawStep('gallows');
+        expect(view.canvas._objects).to.have.length(1);
       });
       it('should be chainable', function () {
-        expect(view.draw('gallows')).to.equal(view);
-      })
+        expect(view.drawStep('gallows')).to.equal(view);
+      });
+    });
+
+    describe('#drawToStep', function () {
+      it('should draw to the number of steps specified', function () {
+        view.canvas.clear();
+        view.drawToStep(3);
+        expect(view.canvas._objects).to.have.length(3);
+      });
+      it('should be chainable', function () {
+        expect(view.drawToStep(1)).to.equal(view);
+      });
     });
 
     describe('#gallows', function () {
       it('should return a fabric.Line representing to top of the gallows', function () {
-        expect(view.gallows()).to.be.a(fabric.Line);
+        expect(view.gallows()).to.be.an.instanceof(fabric.Line);
       });
     });
 
     describe('#noose', function () {
       it('should return a fabric.Line representing the noose', function () {
-        expect(view.noose()).to.be.a(fabric.Line);
+        expect(view.noose()).to.be.an.instanceof(fabric.Line);
       });
     });
 
     describe('#head', function () {
       it('should return a fabric.Circle representing the hangman\'s head', function () {
-        expect(view.head()).to.be.a(fabric.Circle);
+        expect(view.head()).to.be.an.instanceof(fabric.Circle);
       });
     });
 
     describe('#body', function () {
       it('should return a fabric.Line representing the hangman\'s body', function () {
-        expect(view.body()).to.be.a(fabric.Line);
+        expect(view.body()).to.be.an.instanceof(fabric.Line);
       });
     });
 
     describe('#leftArm', function () {
       it('should return a fabric.Line representing the hangman\'s left arm', function () {
-        expect(view.leftArm()).to.be.a(fabric.Line);
+        expect(view.leftArm()).to.be.an.instanceof(fabric.Line);
       });
     });
 
     describe('#rightArm', function () {
       it('should return a fabric.Line representing the hangman\'s right arm', function () {
-        expect(view.rightArm()).to.be.a(fabric.Line);
+        expect(view.rightArm()).to.be.an.instanceof(fabric.Line);
       });
     });
 
     describe('#leftLeg', function () {
       it('should return a fabric.Line representing the hangman\'s left leg', function () {
-        expect(view.leftLeg()).to.be.a(fabric.Line);
+        expect(view.leftLeg()).to.be.an.instanceof(fabric.Line);
       });
     });
 
     describe('#rightLeg', function () {
       it('should return a fabric.Line representing the hangman\'s right leg', function () {
-        expect(view.rightLeg()).to.be.a(fabric.Line);
+        expect(view.rightLeg()).to.be.an.instanceof(fabric.Line);
       });
     });
 
@@ -106,6 +170,20 @@
 <body>
   <div id='mocha'></div>
   <div id='test'></div>
-  <canvas width="580" height="450"></canvas>
+  <div class="hangman" style="display:none">
+    <div class="wrap">
+      <h1>Hangman in HTML, CSS &amp; Javascript</h1>
+      <div class="canvas">
+        <canvas width="580" height="450"></canvas>
+      </div>
+      <div class="board"></div>
+      <div class="input">
+        <input type="text" name="guess" class="guess" maxlength="1"><button>Guess a Letter</button>
+      </div>
+      <div class="used">
+        <span class="misses"></span><span class="title">Missed Letters</span>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

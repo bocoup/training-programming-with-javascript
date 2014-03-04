@@ -4,10 +4,10 @@ module.exports = function (grunt) {
       options: {
         jshintrc: '.jshintrc'
       },
-      hangman: ['app/**/*.js'],
+      app: ['app/**/*.js']
     },
     connect: {
-      hangman: {
+      app: {
         options: {
           hostname: '*'
         }
@@ -17,7 +17,7 @@ module.exports = function (grunt) {
       options: {
         livereload: true
       },
-      hangman: {
+      app: {
         files: ['index.html', 'app/**/*', 'styles/*']
       },
       tests: {
@@ -30,5 +30,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', ['jshint']);
-  grunt.registerTask('develop', ['connect:hangman', 'watch']);
+  grunt.registerTask('develop', ['connect:app', 'watch']);
 };

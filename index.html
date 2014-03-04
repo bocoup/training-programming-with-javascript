@@ -16,7 +16,7 @@
       </div>
       <div class="board"></div>
       <div class="input">
-        <input type="text" name="guess" class="guess" maxlength="1"><button>Make Your Guess</button>
+        <input type="text" name="guess" class="guess" maxlength="1"><button>Guess a Letter</button>
       </div>
       <div class="used">
         <span class="misses"></span><span class="title">Missed Letters</span>
@@ -37,7 +37,9 @@
   <script>
   var Game;
   $(function () {
-    Game = Hangman.createGame();
+    var model = new Hangman.Model(Hangman.WORDLIST);
+    var view = new Hangman.View($('.hangman'));
+    Game = new Hangman.Controller(model, view);
     Game.start();
   });
   </script>

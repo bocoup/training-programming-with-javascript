@@ -2,16 +2,18 @@
 <html>
 <head>
   <meta charset='utf-8'>
-  <link rel='stylesheet' href='../vendor/mocha/mocha.css'>
-  <script src='../vendor/mocha/expect.js'></script>
-  <script src='../vendor/mocha/mocha.js'></script>
+  <link rel='stylesheet' href='../vendor/test/mocha.css'>
+  <script src='../vendor/test/mocha-1.17.1.js'></script>
+  <script src='../vendor/test/chai-1.9.0.js'></script>
   <script src='../vendor/jquery-2.1.0.js'></script>
   <script src='../app/hangman.js'></script>
   <script src='../app/lib/model.js'></script>
   <script src='//localhost:35729/livereload.js'></script>
   <script>
+  var expect = chai.expect;
   mocha.setup('bdd');
   $(mocha.run);
+
   describe('Hangman.Model', function() {
     var model;
 
@@ -19,21 +21,23 @@
       model = new Hangman.Model(['hangman']);
     });
 
-    it('should create a new game state on instantiation', function () {
-      expect(model.guessWord).to.be.a('string');
-      expect(model.hits).to.be.an('array');
-      expect(model.hits).to.have.length(0);
-      expect(model.misses).to.be.an('array');
-      expect(model.misses).to.have.length(0);
-    });
+    describe('constructor', function () {
+      it('should create a new game state', function () {
+        expect(model.guessWord).to.be.a('string');
+        expect(model.hits).to.be.an('array');
+        expect(model.hits).to.have.length(0);
+        expect(model.misses).to.be.an('array');
+        expect(model.misses).to.have.length(0);
+      });
 
-    it('should randomly select a word from a wordlist on instantiation', function () {
-      expect(model.guessWord).to.equal('hangman');
+      it('should randomly select a word from a wordlist', function () {
+        expect(model.guessWord).to.equal('hangman');
+      });
     });
 
     describe('#guessWordLetters', function () {
       it('should split the word to guess into an array of characters', function () {
-        expect(model.guessWordLetters()).to.eql(model.guessWord.split(''));
+        expect(model.guessWordLetters()).to.deep.equal(model.guessWord.split(''));
       });
     });
 
@@ -41,33 +45,33 @@
       it('should return an array of all hits and misses', function () {
         model.guess('a');
         model.guess('b');
-        expect(model.guesses()).to.eql(['a','b']);
+        expect(model.guesses()).to.deep.equal(['a','b']);
       });
     });
 
     describe('#validateGuess', function () {
       it('should return true if guess is a single letter that hasn\'t been guessed yet', function () {
-        expect(model.validateGuess('a')).to.be.ok();
-        expect(model.validateGuess('aa')).to.not.be.ok();
-        expect(model.validateGuess(' ')).to.not.be.ok();
-        expect(model.validateGuess('')).to.not.be.ok();
-        expect(model.validateGuess(1)).to.not.be.ok();
+        expect(model.validateGuess(1)).to.be.false;
+        expect(model.validateGuess('')).to.be.false;
+        expect(model.validateGuess(' ')).to.be.false;
+        expect(model.validateGuess('aa')).to.be.false;
         model.guess('c');
-        expect(model.validateGuess('c')).to.not.be.ok();
+        expect(model.validateGuess('c')).to.be.false;
+        expect(model.validateGuess('a')).to.be.true;
       });
     });
 
     describe('#compareGuessToWord', function () {
       it('should return the positions where a guess appears in the word', function() {
         var positions = model.compareGuessToWord('a');
-        expect(positions.length).to.be(2);
-        expect(positions[0]).to.be(1);
-        expect(positions[1]).to.be(5);
+        expect(positions.length).to.equal(2);
+        expect(positions[0]).to.equal(1);
+        expect(positions[1]).to.equal(5);
       });
 
       it('should return an empty array if the guess does not appear in the word', function() {
         var positions = model.compareGuessToWord('z');
-        expect(positions.length).to.be(0);
+        expect(positions.length).to.equal(0);
       });
     });
 
@@ -91,8 +95,8 @@
       });
 
       it('should return true if the guess was a hit and hasn\'t been guessed already', function () {
-        expect(model.guess('a')).to.be.ok();
-        expect(model.guess('a')).to.not.be.ok();
+        expect(model.guess('a')).to.be.true;
+        expect(model.guess('a')).to.be.false;
       });
     });
 
@@ -101,9 +105,9 @@
         model.guess('a');
         model.guess('b');
         var serialize = model.serialize();
-        expect(serialize.guessWordLetters).to.eql(['h', 'a', 'n', 'g', 'm', 'a', 'n']);
-        expect(serialize.hits).to.eql(['a']);
-        expect(serialize.misses).to.eql(['b']);
+        expect(serialize.guessWordLetters).to.deep.equal(['h', 'a', 'n', 'g', 'm', 'a', 'n']);
+        expect(serialize.hits).to.deep.equal(['a']);
+        expect(serialize.misses).to.deep.equal(['b']);
       });
     });
   });

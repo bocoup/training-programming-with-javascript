@@ -1,20 +1,21 @@
 /**
- * Namespace for our application.
+ * Create or retrieve the namespace for our application.
  */
 var Hangman = window.Hangman = window.Hangman || {};
 
 /**
- * This is the constructor that creates a new instance of our game
- * model.  The responsibility of the model is to hold the state of
- * a running game.
+ * This is a constructor for creating an instance of our game
+ * model. In this project, the model's responsibility is to
+ * encapsulate the state of a running game.
  *
- * @params {Array} wordlist An array of possible words to pick from.
+ * @params {Array} wordlist
+ *   An array of possible words to pick from.
  * @constructs
  */
 Hangman.Model = function (wordlist) {
-  this.guessWord = wordlist[Math.floor(Math.random() * wordlist.length)];
   this.hits = [];
   this.misses = [];
+  this.guessWord = wordlist[Math.floor(Math.random() * wordlist.length)];
 };
 
 /**
@@ -24,7 +25,8 @@ Hangman.Model = function (wordlist) {
 Hangman.Model.prototype = {
 
   /**
-   * Split the guess word into an array of letters.
+   * The word being guessed as an array of letters.
+   *
    * @return {Array}
    */
   guessWordLetters: function () {
@@ -32,9 +34,10 @@ Hangman.Model.prototype = {
   },
 
   /**
-   * Return an array of all our guesses.
+   * Get an array of all our guesses.
+   *
    * @return {Array}
-   *   All the values from hits and misses combined.
+   *   Hits and misses combined.
    */
   guesses: function () {
     return this.hits.concat(this.misses);
@@ -42,20 +45,27 @@ Hangman.Model.prototype = {
 
   /**
    * Determine whether a provided guess is a valid.
-   * @param {String} guess The guess to check
+   *
+   * A valid guess is a single, alphanumeric character that has
+   * not already been guessed during the game.
+   *
+   * @param {String} guess
+   *   The guess to validate.
    * @return {Boolean}
-   *   Returns true if guess is valid, false otherwise.
+   *   True if guess is valid, false otherwise.
    */
   validateGuess: function (guess) {
     return /^[A-Za-z]$/.test(guess) && this.guesses().indexOf(guess) === -1;
   },
 
   /**
-   * Determines the indicies at which a given guess matches the
+   * Determine the positions at which a given letter matches the
    * chosen word, if any.
-   * @param {String} guess The guess to check
+   *
+   * @param {String} guess
+   *   The letter to locate inside the guessWord.
    * @return {Array}
-   *   An array of indices at which the guess matches.
+   *   An array of positions at which the guess matches.
    */
   compareGuessToWord: function (guess) {
     var matches = [];
@@ -68,12 +78,15 @@ Hangman.Model.prototype = {
   },
 
   /**
-   * If a guess is valid, check to see if the letter is in the
-   * guessWord.  If it is, add the guess to hits, if it isn't,
-   * add the guess to misses.
-   * @param {String} guess The guess to try.
+   * If a guess is valid, check to see if the letter being guessed
+   * is in the guessWord.  If it is, add the letter to the model's
+   * array of hits.  If it isn't, add the letter to the model's
+   * array of misses.
+   *
+   * @param {String} guess
+   *   The letter to guess with.
    * @return {Boolean}
-   *   Returns true if guess was a hit, false otherwise.
+   *   True if guess was a hit, false otherwise.
    */
   guess: function (letter) {
     letter = letter.toLowerCase();
@@ -91,9 +104,11 @@ Hangman.Model.prototype = {
   },
 
   /**
-   * Serialize a copy of the model's data to be used by views.
+   * Serialize a copy of model's data to be used by views.
    * Should contain the following properties:
+   *
    * guessWordLetters, hits, misses
+   *
    * @return {Object}
    */
   serialize: function () {

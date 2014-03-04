@@ -1,17 +1,19 @@
 /**
- * Namespace for our application.
+ * Create or retrieve the namespace for our application.
  */
 var Hangman = window.Hangman = window.Hangman || {};
 
 /**
- * This is the constructor that creates a new instance of our game
- * view. The responsibility of the view is to display our game board
- * using data from our model, as provided by the controller.
+ * This is a constructor for creating an instance of our game
+ * view. In this project, the view's responsibility is to
+ * display our game board using data from a model, as provided
+ * by the controller.
  *
+ * @param {HTMLElement} el An HTML element wrapping the game board.
  * @constructs
  */
 Hangman.View = function (el) {
-  $el = $(el);
+  var $el = $(el);
   this.$el = $el;
   this.canvas = new fabric.Canvas($el.find('canvas').get(0));
   this.board = $el.find('.board');
@@ -21,62 +23,19 @@ Hangman.View = function (el) {
 };
 
 /**
- * The View prototype. Methods and properties defined in this
- * object will be shared by all instances of Hangman.View.
+ * The View prototype. Properties defined in this object will
+ * be shared by all instances of Hangman.View.
  */
 Hangman.View.prototype = {
 
+  /**
+   * The order in which parts of the hangman board are drawn
+   *
+   * @property steps
+   * @type Array
+   */
   steps: ['gallows', 'noose', 'head', 'body', 'leftArm',
           'rightArm', 'leftLeg', 'rightLeg'],
-
-  currentGuess: function () {
-    return this.guessField.val();
-  },
-
-  /**
-   * Reset the game board:
-   *
-   * 1. Empty the guess field.
-   * 2. Clear bad letters.
-   * 3. Remove letter boxes.
-   * 4. Remove all canvas objects.
-   *
-   */
-  resetBoard: function () {
-    this.guessField.val('');
-    this.misses.empty();
-    this.board.empty();
-    this.canvas.clear();
-  },
-
-  /**
-   * Given the word to guess as an array of letters, and an array of
-   * letters that have been guessed already, add an div to the board
-   * for each letter.  Letters which have been guessed should be filled
-   * in.
-   *
-   * @param {Array} letters The word to guess as an array of characters.
-   * @param {Array} hits The letters in the guess word which have been found
-   */
-  showHits: function (letters, hits) {
-    this.board.empty();
-    letters.forEach(function (letter, index) {
-      var input = $('<div>&nbsp;</div>').addClass('letter');
-      if (hits.indexOf(letter) !== -1) {
-        input.html(letter);
-      }
-      this.board.append(input);
-    }, this);
-  },
-
-  /**
-   * Show used letters at the bottom of the board.
-   *
-   * @param {Array} letters the used letters to display.
-   */
-  showMisses: function (letters) {
-    this.misses.html(letters.sort().join(', '));
-  },
 
   /**
    * Build the game board.
@@ -89,17 +48,59 @@ Hangman.View.prototype = {
    *   @param {Array} context.guesses
    *     the letters which have been guessed so far.
    */
-  buildBoard: function (context) {
-    this.resetBoard();
-    this.showHits(context.guessWordLetters, context.hits);
-    this.showMisses(context.misses);
-    this.drawSteps(context.misses.length);
+  refreshBoard: function (context) {
+    this.guessField.val('');
+    this.misses.empty();
+    this.board.empty();
+    this.canvas.clear();
+    this.drawHits(context.guessWordLetters, context.hits);
+    this.drawMisses(context.misses);
+    this.drawToStep(context.misses.length);
   },
 
   /**
-   * Draw a fabric object on the canvas.
+   * Given the word to guess as an array of letters, and an array of
+   * letters that have been guessed already, add an div to the board
+   * for each letter.  Letters which have been guessed should be filled
+   * in.
    *
-   * @return {Hangman.View} Return self for chaining.
+   * @param {Array} letters
+   *   The word to guess as an array of characters.
+   * @param {Array} hits
+   *   The letters in the guess word which have been found
+   * @return {Hangman.View}
+   *   Self for chaining.
+   */
+  drawHits: function (letters, hits) {
+    this.board.empty();
+    letters.forEach(function (letter, index) {
+      var input = $('<div>&nbsp;</div>').addClass('letter');
+      if (hits.indexOf(letter) !== -1) {
+        input.html(letter);
+      }
+      this.board.append(input);
+    }, this);
+    return this;
+  },
+
+  /**
+   * Show used letters at the bottom of the board.
+   *
+   * @param {Array} letters
+   *   The letters to display as being used.
+   * @return {Hangman.View}
+   *   Self for chaining.
+   */
+  drawMisses: function (letters) {
+    this.misses.html(letters.sort().join(', '));
+    return this;
+  },
+
+  /**
+   * Draw a fabric.js object on the view's canvas.
+   *
+   * @return {Hangman.View}
+   *   Self for chaining.
    */
   draw: function (item) {
     this.canvas.add(item);
@@ -107,25 +108,29 @@ Hangman.View.prototype = {
   },
 
   /**
-   * Draw a specified step on the canvas by name.
+   * Look up a step defined on the view by name and draw it on our canvas.
    *
-   * @param {String) step the name of the step to draw.
+   * @param {String) step
+   *   The name of the step to draw.
    * @return {Hangman.View}
    *   Self for chaining.
    */
   drawStep: function (step) {
-    this.draw(this[step]());
+    var item = this[step]();
+    this.canvas.add(item);
     return this;
   },
 
   /**
-   * Draw multiple steps on the canvas.
+   * Draw a specified number objects from the step listing on the view's
+   * canvas.
    *
-   * @param {Integer) count the number of steps to draw.
+   * @param {Integer) count
+   *   The number of steps to draw.
    * @return {Hangman.View}
    *   Self for chaining.
    */
-  drawSteps: function (count) {
+  drawToStep: function (count) {
     for(var i=0;i<count;i++) {
       this.drawStep(this.steps[i]);
     }
