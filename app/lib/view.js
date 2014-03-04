@@ -269,4 +269,5 @@ Hangman.View.prototype = {
       selectable: false
     });
   }
+
 };

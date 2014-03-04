@@ -1,5 +1,6 @@
 {
-  "name": "hangman",
+  "name": "programming-with-javascript",
+  "description": "Learn javascript basics by writing a hangman game.",
   "private": true,
   "devDependencies": {
     "grunt": "~0.4.2",

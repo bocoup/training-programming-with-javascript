@@ -25,17 +25,19 @@
       </div>
     </div>
   </div>
-  <!-- In production, we would combine and minify all of these files -->
-
-  <!-- For interacting with the dom/forms/etc easily. -->
+  <!--
+    In production, you would combine and minify the following:
+  -->
+  <!-- For interacting with the dom easily. -->
   <script src="vendor/jquery-2.1.0.js"></script>
   <!-- For drawing on the browser's canvas easily. -->
   <script src="vendor/fabric-1.4.4.js"></script>
-
+  <!-- Our game files -->
   <script src="app/hangman.js"></script>
   <script src="app/lib/model.js"></script>
   <script src="app/lib/view.js"></script>
   <script src="app/lib/controller.js"></script>
+  <!-- Start a game. -->
   <script>
   var Game;
   $(function () {
@@ -45,7 +47,6 @@
     Game.start();
   });
   </script>
-
   <!-- Automatically reload the page as we edit. -->
   <script src="//localhost:35729/livereload.js"></script>
 </body>
