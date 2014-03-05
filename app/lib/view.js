@@ -180,7 +180,7 @@ Hangman.View.prototype = {
    * Implementation:
    *   1. Starting at zero, count up until you reach the passed number.
    *   2. For each number, do the following:
-   *      - Find the name of the step by checking `this.step[idx]`
+   *      - Find the name of the step by checking `this.step[#]`
    *      - Call `this.drawStep` with the name.
    *   3. Return self to allow chaining.
    *
