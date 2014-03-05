@@ -7,6 +7,7 @@
   <script src='../vendor/test/chai-1.9.0.js'></script>
   <script src='../vendor/jquery-2.1.0.js'></script>
   <script src='../vendor/fabric-1.4.4.js'></script>
+  <script src='../app/hangman.js'></script>
   <script src='../app/lib/view.js'></script>
   <script src='//localhost:35729/livereload.js'></script>
   <script>
@@ -18,11 +19,13 @@
     var view, context;
 
     beforeEach(function () {
-      view = new Hangman.View($('.hangman'));
+      view = new Hangman.View($('.hangman').clone());
       context = {
         guessWordLetters: ['h','a','n','g','m','a','n'],
         hits: ['h'],
-        misses: ['z']
+        misses: ['z'],
+        missCount: 1,
+        status: Hangman.PLAYING
       }
     });
 
@@ -48,15 +51,18 @@
         expect(view.misses.html()).to.equal('z');
       });
       it('should clear and redraw the canvas', function () {
-        view.draw(view.gallows());
+        context.missCount = 3;
         view.refreshBoard(context);
-        expect(view.canvas._objects).to.have.length(1);
+        expect(view.canvas._objects).to.have.length(3);
+      });
+      it('should be chainable', function () {
+        expect(view.refreshBoard(context)).to.equal(view);
       });
     });
 
-    describe('#drawHits', function () {
+    describe('#drawBoardLetters', function () {
       it('should build text inputs for the game board', function () {
-        view.drawHits(['h','a','n','g','m','a','n'], ['a']);
+        view.drawBoardLetters(['h','a','n','g','m','a','n'], ['a']);
         expect(view.board.find('div').length).to.equal(7);
         expect(view.board.find('div').eq(0).html()).to.equal('&nbsp;');
         expect(view.board.find('div').eq(1).html()).to.equal('a');
@@ -67,27 +73,27 @@
         expect(view.board.find('div').eq(6).html()).to.equal('&nbsp;');
       });
       it('should be chainable', function () {
-        expect(view.drawHits(['h','a','n','g','m','a','n'], ['a'])).to.equal(view);
+        expect(view.drawBoardLetters(['h','a','n','g','m','a','n'], ['a'])).to.equal(view);
       });
     });
 
-    describe('#drawMisses', function () {
-      it('should display alpha-sorted missed letters at the bottom of the board', function () {
-        view.drawMisses(['z','g']);
+    describe('#drawMissedLetters', function () {
+      it('should display missed letters at the bottom of the board', function () {
+        view.drawMissedLetters(['g','z']);
         expect(view.misses.html()).to.equal('g, z');
       });
       it('should be chainable', function () {
-        expect(view.drawMisses(['z','g'])).to.equal(view);
+        expect(view.drawMissedLetters(['g','z'])).to.equal(view);
       });
     });
 
     describe('#drawWinOrLose', function () {
-      it('should display a won message if the context says the game won', function () {
-        view.drawWinOrLose({won: true});
+      it('should display a won message if the game state is won', function () {
+        view.drawWinOrLose(Hangman.WON);
         expect(view.won.css('display')).to.equal('block');
       });
-      it('should display a lost message if the misses are equal to or greater than the steps possible', function () {
-        view.drawWinOrLose({misses:['a','b','c','d','e','f','g','h']});
+      it('should display a lost message if the game state is lost', function () {
+        view.drawWinOrLose(Hangman.LOST);
         expect(view.lost.css('display')).to.equal('block');
       });
     });

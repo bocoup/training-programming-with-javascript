@@ -23,49 +23,50 @@
 
     beforeEach(function () {
       board = $('.hangman').clone();
-      model = new Hangman.Model(['hangman']);
+      model = new Hangman.Model('hangman');
       view = new Hangman.View(board);
       controller = new Hangman.Controller(model, view);
       spies = {
-        refreshGame: sinon.spy(controller, 'refreshGame'),
-        refreshBoard: sinon.spy(view, 'refreshBoard'),
-        guess: sinon.spy(controller, 'guess'),
-        serialize: sinon.spy(model, 'serialize')
+        model: {
+          serialize: sinon.spy(model, 'serialize')
+        },
+        view: {
+          refreshBoard: sinon.spy(view, 'refreshBoard')
+        },
+        controller: {
+          refreshGame: sinon.spy(controller, 'refreshGame'),
+          guess: sinon.spy(controller, 'guess'),
+        }
       };
       controller.start();
     });
 
-    describe('#start', function () {
-      it('should call refreshGame', function () {
-        expect(spies.refreshGame.called).to.be.true;
-      });
-
-      it('should wire guess button to controller', function () {
-        view.guessField.val('a');
-        view.button.trigger('click');
-        expect(spies.guess.called).to.be.true;
-        expect(spies.guess.calledWith('a')).to.be.true;
+    describe('#refreshGame', function () {
+      it('should refresh the game view with data from the model', function () {
+        controller.refreshGame();
+        expect(spies.model.serialize.called).to.be.true;
+        expect(spies.view.refreshBoard.calledWith(model.serialize())).to.be.true;
       });
     });
 
     describe('#guess', function () {
-      it('should send guess to model', function () {
+      it('should send guess to model and refresh game', function () {
         controller.guess('b');
         expect(model.misses).to.deep.equal(['b']);
-      });
-
-      it('should call refreshGame', function () {
-        controller.guess('b');
-        expect(spies.refreshGame.called).to.be.true;
+        expect(spies.controller.refreshGame.called).to.be.true;
       });
     });
 
-    describe('#refreshGame', function () {
-      it('should call refreshBoard on the view with the serialized model', function () {
-        controller.refreshGame();
-        expect(spies.refreshBoard.calledWith(model.serialize())).to.be.true;
+    describe('#start', function () {
+      it('should wire guess button to controller and call refreshGame', function () {
+        expect(spies.controller.refreshGame.called).to.be.true;
+        view.guessField.val('a');
+        view.button.trigger('click');
+        expect(spies.controller.guess.called).to.be.true;
+        expect(spies.controller.guess.calledWith('a')).to.be.true;
       });
     });
+
   });
   </script>
 </head>

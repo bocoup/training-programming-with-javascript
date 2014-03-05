@@ -39,11 +39,8 @@
   <script src="app/lib/controller.js"></script>
   <!-- Start a game. -->
   <script>
-  var Game;
   $(function () {
-    var model = new Hangman.Model(Hangman.WORDLIST);
-    var view = new Hangman.View($('.hangman'));
-    Game = new Hangman.Controller(model, view);
+    var Game = window.Game = Hangman.createGame($('.hangman'));
     Game.start();
   });
   </script>

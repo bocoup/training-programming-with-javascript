@@ -18,7 +18,7 @@
     var model;
 
     beforeEach(function () {
-      model = new Hangman.Model(['hangman']);
+      model = new Hangman.Model('hangman');
     });
 
     describe('constructor', function () {
@@ -28,21 +28,18 @@
         expect(model.hits).to.have.length(0);
         expect(model.misses).to.be.an('array');
         expect(model.misses).to.have.length(0);
-      });
-
-      it('should randomly select a word from a wordlist', function () {
         expect(model.guessWord).to.equal('hangman');
       });
     });
 
     describe('#guessWordLetters', function () {
-      it('should split the word to guess into an array of characters', function () {
+      it('should return the word to be guessed as an array of characters', function () {
         expect(model.guessWordLetters()).to.deep.equal(model.guessWord.split(''));
       });
     });
 
     describe('#guesses', function () {
-      it('should return an array of all hits and misses', function () {
+      it('should return a combination of all hits and misses', function () {
         model.guess('a');
         model.guess('b');
         expect(model.guesses()).to.deep.equal(['a','b']);
@@ -50,7 +47,7 @@
     });
 
     describe('#validateGuess', function () {
-      it('should return true if guess is a single letter that hasn\'t been guessed yet', function () {
+      it('should return true if a guess is valid', function () {
         expect(model.validateGuess(1)).to.be.false;
         expect(model.validateGuess('')).to.be.false;
         expect(model.validateGuess(' ')).to.be.false;
@@ -61,22 +58,8 @@
       });
     });
 
-    describe('#compareGuessToWord', function () {
-      it('should return the positions where a guess appears in the word', function() {
-        var positions = model.compareGuessToWord('a');
-        expect(positions.length).to.equal(2);
-        expect(positions[0]).to.equal(1);
-        expect(positions[1]).to.equal(5);
-      });
-
-      it('should return an empty array if the guess does not appear in the word', function() {
-        var positions = model.compareGuessToWord('z');
-        expect(positions.length).to.equal(0);
-      });
-    });
-
     describe('#guess', function () {
-      it('should add the guessed letter to hits if it is in the word and hasn\'t been guessed', function () {
+      it('should add a valid guess to the hits array if it does appear in the guessWord', function () {
         model.guess('z');
         expect(model.hits).to.have.length(0);
         model.guess('a');
@@ -85,7 +68,7 @@
         expect(model.hits).to.have.length(1);
       });
 
-      it('should add the guessed letter to the list of guesses if it is valid and hasn\'t been guessed already', function () {
+      it('should add a valid guess to the missed array if it does not appear in the guessWord', function () {
         model.guess('z');
         expect(model.hits).to.have.length(0);
         model.guess('a');
@@ -94,17 +77,26 @@
         expect(model.hits).to.have.length(1);
       });
 
-      it('should return true if the guess was a hit and hasn\'t been guessed already', function () {
+      it('should return true if the guess was a valid hit', function () {
         expect(model.guess('a')).to.be.true;
         expect(model.guess('a')).to.be.false;
       });
     });
 
     describe('#won', function () {
-      it('should return a true if the game is in a winning state', function () {
+      it('should return true if the game is in a winning state', function () {
         expect(model.won()).to.be.false;
         model.hits = ['h','a','n','g','m','n'];
         expect(model.won()).to.be.true;
+      });
+    });
+
+    describe('#lost', function () {
+      it('should return true if the game is in a losing state', function () {
+        model.maxMisses = 1;
+        expect(model.lost()).to.be.false;
+        model.misses = ['h'];
+        expect(model.lost()).to.be.true;
       });
     });
 
@@ -116,7 +108,7 @@
         expect(serialize.guessWordLetters).to.deep.equal(['h', 'a', 'n', 'g', 'm', 'a', 'n']);
         expect(serialize.hits).to.deep.equal(['a']);
         expect(serialize.misses).to.deep.equal(['b']);
-        expect(serialize.won).to.be.false;
+        expect(serialize.status).to.equal(Hangman.PLAYING);
       });
     });
   });

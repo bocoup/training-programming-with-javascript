@@ -8,14 +8,22 @@ var Hangman = window.Hangman = window.Hangman || {};
  * model. In this project, the model's responsibility is to
  * encapsulate the state of a running game.
  *
- * @params {Array} wordlist
- *   An array of possible words to pick from.
+ * Implementation:
+ *   1. Store an empty array on `this.hits`
+ *   2. Store an empty array on `this.misses`
+ *   3. Store the passed word on `this.guessWord`
+ *   4. Store a null value on `this.maxMisses`
+ *      The maximum number of misses will be determined later.
+ *
+ * @params {String} word
+ *   The word to guess.
  * @constructs
  */
-Hangman.Model = function (wordlist) {
+Hangman.Model = function (word) {
   this.hits = [];
   this.misses = [];
-  this.guessWord = wordlist[Math.floor(Math.random() * wordlist.length)];
+  this.guessWord = word;
+  this.maxMisses = null;
 };
 
 /**
@@ -25,7 +33,10 @@ Hangman.Model = function (wordlist) {
 Hangman.Model.prototype = {
 
   /**
-   * The word being guessed as an array of letters.
+   * Get array of letters from guessWord.
+   *
+   * Implementation:
+   *   1. Return `this.guessWord` as an array of characters.
    *
    * @return {Array}
    */
@@ -34,10 +45,12 @@ Hangman.Model.prototype = {
   },
 
   /**
-   * Get an array of all our guesses.
+   * Get all of the guesses so far.
+   *
+   * Implementation:
+   *   1. Return a combined array of `this.hits` and `this.misses`.
    *
    * @return {Array}
-   *   Hits and misses combined.
    */
   guesses: function () {
     return this.hits.concat(this.misses);
@@ -46,47 +59,32 @@ Hangman.Model.prototype = {
   /**
    * Determine whether a provided guess is a valid.
    *
-   * A valid guess is a single, alphanumeric character that has
-   * not already been guessed during the game.
+   * Implementation:
+   *   1. Return false if guess is blank or undefined.
+   *   2. Return false if guess is more than one character.
+   *   3. Return false if guess is not alphanumeric.
+   *   4. Return false if guess is has already been made.
+   *   5. Return true if you made it this far, the guess is valid!
    *
-   * @param {String} guess
+   * @param {String} letter
    *   The guess to validate.
    * @return {Boolean}
-   *   True if guess is valid, false otherwise.
    */
-  validateGuess: function (guess) {
-    return /^[A-Za-z]$/.test(guess) && this.guesses().indexOf(guess) === -1;
+  validateGuess: function (letter) {
+    return /^[A-Za-z]$/.test(letter) && this.guesses().indexOf(letter) === -1;
   },
 
   /**
-   * Determine the positions at which a given letter matches the
-   * chosen word, if any.
+   * Validate a guess and store in on the model.
    *
-   * @param {String} guess
-   *   The letter to locate inside the guessWord.
-   * @return {Array}
-   *   An array of positions at which the guess matches.
-   */
-  compareGuessToWord: function (guess) {
-    var matches = [];
-    this.guessWordLetters().forEach(function (letter, index) {
-      if (letter === guess) {
-        matches.push(index);
-      }
-    });
-    return matches;
-  },
-
-  /**
-   * If a guess is valid, check to see if the letter being guessed
-   * is in the guessWord.  If it is, add the letter to the model's
-   * array of hits.  If it isn't, add the letter to the model's
-   * array of misses.
+   * Implementation:
+   *   1. Return false if guessed letter doesn't pass `validateGuess`.
+   *   2. If letter appears in guess word, add it to hits and return true.
+   *   3. Otherwise, add it to misses and return false.
    *
    * @param {String} guess
    *   The letter to guess with.
    * @return {Boolean}
-   *   True if guess was a hit, false otherwise.
    */
   guess: function (letter) {
     letter = letter.toLowerCase();
@@ -105,11 +103,12 @@ Hangman.Model.prototype = {
   /**
    * Determine if the current state of the game is winning.
    *
-   * Note: A non-winning game is not necessarily lost.
+   * Implementation:
+   *   1. Return true if each letter in the guess word
+   *      exists in the hits array.
+   *   2. Return false otherwise.
    *
    * @return {Boolean}
-   *   True if each letter in the guessWord exists in
-   *   the hits array, otherwise false.
    */
   won: function () {
     return this.guessWordLetters().every(function (letter) {
@@ -118,10 +117,51 @@ Hangman.Model.prototype = {
   },
 
   /**
-   * Serialize a copy of model's data to be used by views.
-   * Should contain the following properties:
+   * Determine if the current state of the game is losing.
    *
-   * guessWordLetters, hits, misses
+   * Implementation:
+   *   1. Return false if we don't know how many misses are allowed.
+   *   2. Return true if the number of misses is greater than or
+   *      equal to the maximum allowed.
+   *
+   * @return {Boolean}
+   */
+  lost: function () {
+    return this.maxMisses && this.misses.length >= this.maxMisses;
+  },
+
+  /**
+   * Determine the state of the game.
+   *
+   * Implementation:
+   *   1. Return `Hangman.WON` if `this.won()` is true.
+   *   2. Return `Hangman.LOST` if `this.lost()` is true.
+   *   3. Return `Hangman.PLAYING` if neither was true.
+   *
+   * @return {String}
+   */
+  status: function () {
+    if (this.won()) {
+      return Hangman.WON;
+    } else if (this.lost()) {
+      return Hangman.LOST;
+    } else {
+      return Hangman.PLAYING;
+    }
+  },
+
+  /**
+   * Serialize a copy of this model's data for usage by views.
+   *
+   * Implementation:
+   *   1. Return an object with the following structure:
+   *      {
+   *        guessWordLetters: the letters in the guess word as an array
+   *        hits: a copy of the hits array
+   *        misses: a copy of the misses array
+   *        missCount: the number of misses so far
+   *        status: the game status
+   *      }
    *
    * @return {Object}
    */
@@ -129,8 +169,9 @@ Hangman.Model.prototype = {
     return {
       guessWordLetters: this.guessWordLetters(),
       hits: this.hits.slice(),
-      misses: this.misses.slice(),
-      won: this.won()
+      misses: this.misses.slice().sort(),
+      missCount: this.misses.length,
+      status: this.status()
     };
   }
 
