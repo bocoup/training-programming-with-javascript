@@ -153,29 +153,45 @@ Hangman.View.prototype = {
   },
 
   /**
-   * Look up a step defined on the view by name and draw it on our canvas.
+   * Find a step by name and draw on the view's canvas.
+   *
+   * Implementation:
+   *   1. Take passed step and see if there is a matching method on the view.
+   *   2. If it is, invoke the method and pass the result to `this.draw`.
+   *   3. Return self to allow chaining.
    *
    * @param {String) step
    *   The name of the step to draw.
    * @return {Hangman.View}
    */
-  drawStep: function (step) {
-    var ob = this[step]();
-    return this.draw(ob);
+  drawStep: function (name) {
+    var step = this[name];
+    if (step) {
+      var ob = step();
+      this.draw(ob);
+    }
+    return this;
   },
 
   /**
    * Draw a specified number objects from the step listing on the view's
    * canvas.
    *
-   * @param {Integer) count
+   * Implementation:
+   *   1. Starting at zero, count up until you reach the passed number.
+   *   2. For each number, do the following:
+   *      - Find the name of the step by checking `this.step[idx]`
+   *      - Call `this.drawStep` with the name.
+   *   3. Return self to allow chaining.
+   *
+   * @param {Integer) number
    *   The number of steps to draw.
    * @return {Hangman.View}
-   *   Self for chaining.
    */
-  drawToStep: function (count) {
-    for(var i=0;i<count;i++) {
-      this.drawStep(this.steps[i]);
+  drawToStep: function (number) {
+    for (var idx=0; idx < number; idx++) {
+      var step = this.steps[idx];
+      this.drawStep(step);
     }
     return this;
   },
@@ -188,7 +204,11 @@ Hangman.View.prototype = {
    *   2. Clear the misses element.
    *   3. Clear the board element.
    *   4. Clear the canvas.
-   *   5.
+   *   5. Call `this.drawBoardLetters` with correct data from context.
+   *   6. Call `this.drawMissedLetters` with correct data from context.
+   *   7. Call `this.drawToStep` with correct data from context.
+   *   8. Call `this.drawWinOrLoss` with correct data from context.
+   *   9. Return self to allow chaining.
    *
    * @param {Object} context
    *   @param {Array} context.guessWordLetters

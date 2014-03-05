@@ -19,22 +19,36 @@ Hangman.PLAYING = "playing";
 /**
  * Randomly select an element from a provided array.
  *
+ * Implementation:
+ *   1. Generate a random number from 0 to 1.
+ *   2. Get the maximum size of the number (the length of the wordlist).
+ *   3. Multiply the random number and the max size together.
+ *   4. Round the number down to an integer.
+ *   5. Return that item from the wordlist.
+ *
  * @param {Array} wordlist
- *   The word to guess as an array of characters.
+ *   An array of possible words to select.
  * @return {String}
- *   A single element from the provided array.
  */
 Hangman.randomWord = function (wordlist) {
-  return wordlist[Math.floor(Math.random() * wordlist.length)];
+  var randomNumber = Math.random();
+  var maxSize = wordlist.length;
+  var index = Math.floor(randomNumber*maxSize);
+  return wordlist[index];
 };
 
 /**
  * Create a new instance of our game on a provided element.
  *
+ * Implementation:
+ *   1. Instantiate a model with a word to guess.
+ *   2. Instantiate a view with a provided HTML element.
+ *   3. Instantiate a controller, giving it the model and view.
+ *   4. Return the controller.
+ *
  * @param {HTMLElement} el
  *   An HTML element that wraps the game board.
- * @return {String}
- *   A single element from the provided array.
+ * @return {Hangman.Controller}
  */
 Hangman.createGame = function (el) {
   var model = new Hangman.Model(Hangman.randomWord(Hangman.WORDLIST));
