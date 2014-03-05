@@ -217,8 +217,9 @@ Hangman.View.prototype = {
    *     The matching letters which have been guessed so far.
    *   @param {Array} context.misses
    *     The missed letters which have been guessed so far.
-   *   @param {Boolean} context.won
-   *     True or false, depending on if the game has been won.
+   *   @param {Boolean} context.status
+   *     The state of the game.  One of the following:
+   *     Hangman.WON, Hangman.LOST or Hangman.Playing
    * @return {Hangman.View}
    *   Self for chaining.
    */
