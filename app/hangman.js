@@ -12,9 +12,9 @@ Hangman.WORDLIST = 'abbey abruptly affix askew axiom azure bagpipes banjo bayou 
 /**
  * The possible states our game could be in.
  */
-Hangman.WON = "won";
-Hangman.LOST = "lost";
-Hangman.PLAYING = "playing";
+Hangman.WON = 'won';
+Hangman.LOST = 'lost';
+Hangman.PLAYING = 'playing';
 
 /**
  * Randomly select an element from a provided array.
