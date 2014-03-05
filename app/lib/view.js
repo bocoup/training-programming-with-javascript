@@ -49,10 +49,10 @@ Hangman.View.prototype = {
    *
    * Implementation:
    *   1. Create an array of strings matching function names on the
-   *      view which can be used to draw parts of the hangman. The
-   *      order of the steps will determine how the hangman is drawn.
-   *      The number of elements in this array will be used to determine
-   *      how many steps it takes to lose the game.
+   *      view. The order of this array will determine how the hangman
+   *      is drawn each time an incorrect guess is registered. The number
+   *      of elements in this array will be used to determine how many
+   *      times a player can guess incorrectly before losing the game.
    *
    * @property steps
    * @type Array
