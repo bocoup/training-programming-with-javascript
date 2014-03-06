@@ -101,7 +101,7 @@ Hangman.Model.prototype = {
   },
 
   /**
-   * Determine if the current state of the game is winning.
+   * Determine if the game is currently in a winning state.
    *
    * Implementation:
    *   1. Return true if each letter in the guess word
@@ -117,7 +117,7 @@ Hangman.Model.prototype = {
   },
 
   /**
-   * Determine if the current state of the game is losing.
+   * Determine if the game is currently in a losing state.
    *
    * Implementation:
    *   1. Return false if we don't know how many misses are allowed.
