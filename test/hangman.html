@@ -8,7 +8,7 @@
   <script src='../vendor/test/sinon-1.8.2.js'></script>
   <script src="../vendor/jquery-2.1.0.js"></script>
   <script src="../vendor/fabric-1.4.4.js"></script>
-  <script src="../app/hangman.js"></script>
+  <script src="../app/lib/hangman.js"></script>
   <script src="../app/lib/model.js"></script>
   <script src="../app/lib/view.js"></script>
   <script src="../app/lib/controller.js"></script>
@@ -27,9 +27,9 @@
       });
     });
 
-    describe('::randomWord', function () {
+    describe('::randomElement', function () {
       it('should choose a random element from a provided array', function () {
-        expect(Hangman.randomWord(Hangman.WORDLIST)).to.be.a('string');
+        expect(Hangman.randomElement(Hangman.WORDLIST)).to.be.a('string');
       });
     });
 

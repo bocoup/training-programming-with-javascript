@@ -33,17 +33,12 @@
   <!-- For drawing on the browser's canvas easily. -->
   <script src="vendor/fabric-1.4.4.js"></script>
   <!-- Our game files -->
-  <script src="app/hangman.js"></script>
+  <script src="app/lib/hangman.js"></script>
   <script src="app/lib/model.js"></script>
   <script src="app/lib/view.js"></script>
   <script src="app/lib/controller.js"></script>
   <!-- Start a game. -->
-  <script>
-  $(function () {
-    var Game = window.Game = Hangman.createGame($('.hangman'));
-    Game.start();
-  });
-  </script>
+  <script src="app/main.js"></script>
   <!-- Automatically reload the page as we edit. -->
   <script src="//localhost:35729/livereload.js"></script>
 </body>

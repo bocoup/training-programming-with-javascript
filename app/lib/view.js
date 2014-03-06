@@ -47,12 +47,11 @@ Hangman.View.prototype = {
   /**
    * The order in which parts of the hangman board are drawn
    *
-   * Implementation:
-   *   1. Create an array of strings matching function names on the
-   *      view. The order of this array will determine how the hangman
-   *      is drawn each time an incorrect guess is registered. The number
-   *      of elements in this array will be used to determine how many
-   *      times a player can guess incorrectly before losing the game.
+   * An array of strings matching function names on the view. The order of this
+   * array will determine how the hangman is drawn each time an incorrect guess
+   * is registered. The number of elements in this array will be used to
+   * determine how many times a player can guess incorrectly before losing the
+   * game.
    *
    * @property steps
    * @type Array
@@ -165,7 +164,7 @@ Hangman.View.prototype = {
    * @return {Hangman.View}
    */
   drawStep: function (name) {
-    var step = this[name];
+    var step = Hangman.View[name];
     if (step) {
       var ob = step();
       this.draw(ob);
@@ -234,113 +233,112 @@ Hangman.View.prototype = {
     this.drawWinOrLose(context.status);
     return this;
   },
+};
 
-  /**
-   * Build a fabric.Line to represent the top of the gallows.
-   *
-   * @return {fabric.Line}
-   */
-  gallows: function () {
-    return new fabric.Line([50, 20, 520, 20], {
-      stroke: '#666',
-      strokeWidth: 10,
-      selectable: false
-    });
-  },
+/**
+ * Build a fabric.Line to represent the top of the gallows.
+ *
+ * @return {fabric.Line}
+ */
+Hangman.View.gallows = function () {
+  return new fabric.Line([50, 20, 520, 20], {
+    stroke: '#666',
+    strokeWidth: 10,
+    selectable: false
+  });
+};
 
-  /**
-   * Build a fabric.Line to represent the noose on the gallows.
-   *
-   * @return {fabric.Line}
-   */
-  noose: function () {
-    return new fabric.Line([275, 20, 275, 100], {
-      stroke: '#666',
-      strokeWidth: 5,
-      selectable: false
-    });
-  },
+/**
+ * Build a fabric.Line to represent the noose on the gallows.
+ *
+ * @return {fabric.Line}
+ */
+Hangman.View.noose = function () {
+  return new fabric.Line([275, 20, 275, 100], {
+    stroke: '#666',
+    strokeWidth: 5,
+    selectable: false
+  });
+};
 
-  /**
-   * Build a fabric.Circle to represent the hangman's head.
-   *
-   * @return {fabric.Circle}
-   */
-  head: function () {
-    return new fabric.Circle({
-      left: 200,
-      top: 55,
-      radius: 50,
-      strokeWidth: 5,
-      stroke: '#666',
-      fill: '#fff',
-      selectable: false
-    });
-  },
+/**
+ * Build a fabric.Circle to represent the hangman's head.
+ *
+ * @return {fabric.Circle}
+ */
+Hangman.View.head = function () {
+  return new fabric.Circle({
+    left: 200,
+    top: 55,
+    radius: 50,
+    strokeWidth: 5,
+    stroke: '#666',
+    fill: '#fff',
+    selectable: false
+  });
+};
 
-  /**
-   * Build a fabric.Line to represent the hangman's body.
-   *
-   * @return {fabric.Line}
-   */
-  body: function () {
-    return new fabric.Line([275, 150, 275, 250], {
-      stroke: '#666',
-      strokeWidth: 5,
-      selectable: false
-    });
-  },
+/**
+ * Build a fabric.Line to represent the hangman's body.
+ *
+ * @return {fabric.Line}
+ */
+Hangman.View.body = function () {
+  return new fabric.Line([275, 150, 275, 250], {
+    stroke: '#666',
+    strokeWidth: 5,
+    selectable: false
+  });
+};
 
-  /**
-   * Build a fabric.Line to represent the hangman's left arm.
-   *
-   * @return {fabric.Line}
-   */
-  leftArm: function () {
-    return new fabric.Line([275, 180, 175, 250], {
-      stroke: '#666',
-      strokeWidth: 5,
-      selectable: false
-    });
-  },
+/**
+ * Build a fabric.Line to represent the hangman's left arm.
+ *
+ * @return {fabric.Line}
+ */
+Hangman.View.leftArm = function () {
+  return new fabric.Line([275, 180, 175, 250], {
+    stroke: '#666',
+    strokeWidth: 5,
+    selectable: false
+  });
+};
 
-  /**
-   * Build a fabric.Line to represent the hangman's right arm.
-   *
-   * @return {fabric.Line}
-   */
-  rightArm: function () {
-    return new fabric.Line([275, 180, 375, 250], {
-      stroke: '#666',
-      strokeWidth: 5,
-      selectable: false
-    });
-  },
+/**
+ * Build a fabric.Line to represent the hangman's right arm.
+ *
+ * @return {fabric.Line}
+ */
+Hangman.View.rightArm = function () {
+  return new fabric.Line([275, 180, 375, 250], {
+    stroke: '#666',
+    strokeWidth: 5,
+    selectable: false
+  });
+};
 
-  /**
-   * Build a fabric.Line to represent the hangman's left leg.
-   *
-   * @return {fabric.Line}
-   */
-  leftLeg: function (){
-    return new fabric.Line([275, 250, 175, 350], {
-      stroke: '#666',
-      strokeWidth: 5,
-      selectable: false
-    });
-  },
+/**
+ * Build a fabric.Line to represent the hangman's left leg.
+ *
+ * @return {fabric.Line}
+ */
+Hangman.View.leftLeg = function (){
+  return new fabric.Line([275, 250, 175, 350], {
+    stroke: '#666',
+    strokeWidth: 5,
+    selectable: false
+  });
+};
 
-  /**
-   * Build a fabric.Line to represent the hangman's right leg.
-   *
-   * @return {fabric.Line}
-   */
-  rightLeg: function () {
-    return new fabric.Line([275, 250, 375, 350], {
-      stroke: '#666',
-      strokeWidth: 5,
-      selectable: false
-    });
-  }
-
+/**
+ * Build a fabric.Line to represent the hangman's right leg.
+ *
+ * @return {fabric.Line}
+ */
+Hangman.View.rightLeg = function () {
+  return new fabric.Line([275, 250, 375, 350], {
+    stroke: '#666',
+    strokeWidth: 5,
+    selectable: false
+  });
 };

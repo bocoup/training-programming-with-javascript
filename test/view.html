@@ -100,19 +100,19 @@
 
     describe('#draw', function () {
       it('should find and draw a requested item on the canvas', function () {
-        var gallows = view.gallows();
+        var gallows = Hangman.View.gallows();
         view.canvas.clear();
         view.draw(gallows);
         expect(view.canvas._objects[0]).to.equal(gallows);
       });
       it('should be chainable', function () {
-        expect(view.draw(view.gallows())).to.equal(view);
+        expect(view.draw(Hangman.View.gallows())).to.equal(view);
       });
     });
 
     describe('#drawStep', function () {
       it('should draw a step on the canvas as referenced by name', function () {
-        var gallows = view.gallows()
+        var gallows = Hangman.View.gallows()
         view.canvas.clear();
         view.drawStep('gallows');
         expect(view.canvas._objects).to.have.length(1);
@@ -133,51 +133,51 @@
       });
     });
 
-    describe('#gallows', function () {
+    describe('::gallows', function () {
       it('should return a fabric.Line representing to top of the gallows', function () {
-        expect(view.gallows()).to.be.an.instanceof(fabric.Line);
+        expect(Hangman.View.gallows()).to.be.an.instanceof(fabric.Line);
       });
     });
 
-    describe('#noose', function () {
+    describe('::noose', function () {
       it('should return a fabric.Line representing the noose', function () {
-        expect(view.noose()).to.be.an.instanceof(fabric.Line);
+        expect(Hangman.View.noose()).to.be.an.instanceof(fabric.Line);
       });
     });
 
-    describe('#head', function () {
+    describe('::head', function () {
       it('should return a fabric.Circle representing the hangman\'s head', function () {
-        expect(view.head()).to.be.an.instanceof(fabric.Circle);
+        expect(Hangman.View.head()).to.be.an.instanceof(fabric.Circle);
       });
     });
 
-    describe('#body', function () {
+    describe('::body', function () {
       it('should return a fabric.Line representing the hangman\'s body', function () {
-        expect(view.body()).to.be.an.instanceof(fabric.Line);
+        expect(Hangman.View.body()).to.be.an.instanceof(fabric.Line);
       });
     });
 
-    describe('#leftArm', function () {
+    describe('::leftArm', function () {
       it('should return a fabric.Line representing the hangman\'s left arm', function () {
-        expect(view.leftArm()).to.be.an.instanceof(fabric.Line);
+        expect(Hangman.View.leftArm()).to.be.an.instanceof(fabric.Line);
       });
     });
 
-    describe('#rightArm', function () {
+    describe('::rightArm', function () {
       it('should return a fabric.Line representing the hangman\'s right arm', function () {
-        expect(view.rightArm()).to.be.an.instanceof(fabric.Line);
+        expect(Hangman.View.rightArm()).to.be.an.instanceof(fabric.Line);
       });
     });
 
-    describe('#leftLeg', function () {
+    describe('::leftLeg', function () {
       it('should return a fabric.Line representing the hangman\'s left leg', function () {
-        expect(view.leftLeg()).to.be.an.instanceof(fabric.Line);
+        expect(Hangman.View.leftLeg()).to.be.an.instanceof(fabric.Line);
       });
     });
 
-    describe('#rightLeg', function () {
+    describe('::rightLeg', function () {
       it('should return a fabric.Line representing the hangman\'s right leg', function () {
-        expect(view.rightLeg()).to.be.an.instanceof(fabric.Line);
+        expect(Hangman.View.rightLeg()).to.be.an.instanceof(fabric.Line);
       });
     });
 
