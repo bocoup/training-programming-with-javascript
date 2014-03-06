@@ -62,7 +62,7 @@ Hangman.Model.prototype = {
    * Implementation:
    *   1. Return false if guess is blank or undefined.
    *   2. Return false if guess is more than one character.
-   *   3. Return false if guess is not a letter.
+   *   3. Return false if guess is not a lower-case letter.
    *   4. Return false if guess is has already been made.
    *   5. Return true if you made it this far, the guess is valid!
    *
@@ -71,7 +71,7 @@ Hangman.Model.prototype = {
    * @return {Boolean}
    */
   validateGuess: function (letter) {
-    return /^[A-Za-z]$/.test(letter) && this.guesses().indexOf(letter) === -1;
+    return /^[a-z]$/.test(letter) && this.guesses().indexOf(letter) === -1;
   },
 
   /**
