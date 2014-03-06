@@ -47,12 +47,11 @@ Hangman.View.prototype = {
   /**
    * The order in which parts of the hangman board are drawn
    *
-   * Implementation:
-   *   1. Create an array of strings matching function names on the
-   *      view. The order of this array will determine how the hangman
-   *      is drawn each time an incorrect guess is registered. The number
-   *      of elements in this array will be used to determine how many
-   *      times a player can guess incorrectly before losing the game.
+   * An array of strings matching function names on the view. The order of this
+   * array will determine how the hangman is drawn each time an incorrect guess
+   * is registered. The number of elements in this array will be used to
+   * determine how many times a player can guess incorrectly before losing the
+   * game.
    *
    * @property steps
    * @type Array
