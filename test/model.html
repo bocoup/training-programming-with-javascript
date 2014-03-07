@@ -100,15 +100,15 @@
       });
     });
 
-    describe('#serialize', function () {
-      it('should return a serialized copy of relevant model data for usage by views', function () {
+    describe('#data', function () {
+      it('should return a copy of relevant model data for usage by views', function () {
         model.guess('a');
         model.guess('b');
-        var serialize = model.serialize();
-        expect(serialize.guessWordLetters).to.deep.equal(['h', 'a', 'n', 'g', 'm', 'a', 'n']);
-        expect(serialize.hits).to.deep.equal(['a']);
-        expect(serialize.misses).to.deep.equal(['b']);
-        expect(serialize.status).to.equal(Hangman.PLAYING);
+        var data = model.data();
+        expect(data.guessWordLetters).to.deep.equal(['h', 'a', 'n', 'g', 'm', 'a', 'n']);
+        expect(data.hits).to.deep.equal(['a']);
+        expect(data.misses).to.deep.equal(['b']);
+        expect(data.status).to.equal(Hangman.PLAYING);
       });
     });
   });

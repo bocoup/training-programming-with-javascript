@@ -21,6 +21,12 @@
   describe('Hangman', function() {
     var model;
 
+    describe('constructor', function () {
+      it('should wire up an instance of Hangman.Controller', function () {
+        expect(new Hangman($('.hangman'))).to.be.instanceof(Hangman.Controller);
+      });
+    });
+
     describe('WORDLIST', function () {
       it('should have an array of words', function () {
         expect(Hangman.WORDLIST).to.be.an('array');
@@ -30,12 +36,6 @@
     describe('::randomElement', function () {
       it('should choose a random element from a provided array', function () {
         expect(Hangman.randomElement(Hangman.WORDLIST)).to.be.a('string');
-      });
-    });
-
-    describe('::createGame', function () {
-      it('should wire up a game', function () {
-        expect(Hangman.createGame($('.hangman'))).to.be.instanceof(Hangman.Controller);
       });
     });
 

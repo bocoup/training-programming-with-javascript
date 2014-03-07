@@ -7,7 +7,7 @@
   <script src='../vendor/test/chai-1.9.0.js'></script>
   <script src='../vendor/jquery-2.1.0.js'></script>
   <script src='../vendor/fabric-1.4.4.js'></script>
-  <script src='../app/hangman.js'></script>
+  <script src='../app/lib/hangman.js'></script>
   <script src='../app/lib/view.js'></script>
   <script src='//localhost:35729/livereload.js'></script>
   <script>
@@ -61,7 +61,7 @@
     });
 
     describe('#drawBoardLetters', function () {
-      it('should build text inputs for the game board', function () {
+      it('should letter boxes for the game board', function () {
         view.drawBoardLetters(['h','a','n','g','m','a','n'], ['a']);
         expect(view.board.find('div').length).to.equal(7);
         expect(view.board.find('div').eq(0).html()).to.equal('&nbsp;');
@@ -93,6 +93,7 @@
         expect(view.won.css('display')).to.equal('block');
       });
       it('should display a lost message if the game state is lost', function () {
+        console.log(Hangman);
         view.drawWinOrLose(Hangman.LOST);
         expect(view.lost.css('display')).to.equal('block');
       });

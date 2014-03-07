@@ -1,7 +1,21 @@
-/**
- * Namespace for our application.
+ /**
+ * This is a constructor for creating an instance of our game.
+ *
+ * Implementation:
+ *   1. Instantiate Hangman.Model with a word to guess.
+ *   2. Instantiate Hangman.View with a provided HTML element.
+ *   3. Instantiate Hangman.Controller, passing it the model and view.
+ *   4. Return Hangman.Controller.
+ *
+ * @param {HTMLElement} el
+ *   An HTML element that wraps the game board.
+ * @return {Hangman.Controller}
  */
-var Hangman = window.Hangman = window.Hangman || {};
+function Hangman(el) {
+  var model = new Hangman.Model(Hangman.randomElement(Hangman.WORDLIST));
+  var view = new Hangman.View(el);
+  return new Hangman.Controller(model, view);
+}
 
 /**
  * The list of words we'll choose from.
@@ -35,23 +49,4 @@ Hangman.randomElement = function (array) {
   var maxSize = array.length;
   var index = Math.floor(randomNumber*maxSize);
   return array[index];
-};
-
-/**
- * Create a new instance of our game on a provided element.
- *
- * Implementation:
- *   1. Instantiate a model with a word to guess.
- *   2. Instantiate a view with a provided HTML element.
- *   3. Instantiate a controller, giving it the model and view.
- *   4. Return the controller.
- *
- * @param {HTMLElement} el
- *   An HTML element that wraps the game board.
- * @return {Hangman.Controller}
- */
-Hangman.createGame = function (el) {
-  var model = new Hangman.Model(Hangman.randomElement(Hangman.WORDLIST));
-  var view = new Hangman.View(el);
-  return new Hangman.Controller(model, view);
 };

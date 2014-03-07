@@ -38,202 +38,207 @@ Hangman.View = function (el) {
   this.guessField = $el.find('.guess');
 };
 
+
 /**
- * The View prototype. Properties defined in this object will
- * be shared by all instances of Hangman.View.
+ * The order in which parts of the hangman board are drawn
+ *
+ * An array of strings matching static function on Hangman.View. The order of
+ * this array will determine how the hangman is drawn each time an incorrect
+ * guess is registered. The number of elements in this array will be used to
+ * determine how many times a player can guess incorrectly before losing the
+ * game.
+ *
+ * @property steps
+ * @type Array
  */
-Hangman.View.prototype = {
+Hangman.View.prototype.steps = [
+  'gallows',
+  'noose',
+  'head',
+  'body',
+  'leftArm',
+  'rightArm',
+  'leftLeg',
+  'rightLeg'
+];
 
-  /**
-   * The order in which parts of the hangman board are drawn
-   *
-   * An array of strings matching function names on the view. The order of this
-   * array will determine how the hangman is drawn each time an incorrect guess
-   * is registered. The number of elements in this array will be used to
-   * determine how many times a player can guess incorrectly before losing the
-   * game.
-   *
-   * @property steps
-   * @type Array
-   */
-  steps: ['gallows', 'noose', 'head', 'body', 'leftArm',
-          'rightArm', 'leftLeg', 'rightLeg'],
-
-  /**
-   * Build the letter boxes that appear at the bottom of the canvas.
-   *
-   * Implementation:
-   *   1. Empty the board element.
-   *   2. Iterate over the provided letters. Do the following with each:
-   *        - Create a div with the class ".letter".
-   *        - If letter is in hits, set innerHTML of div to the letter.
-   *        - If not, set innerHTML of div to "&nbsp;".
-   *        - Append div to the board element.
-   *   3. Return self to allow chaining.
-   *
-   * @param {Array} letters
-   *   The word to guess as an array of characters.
-   * @param {Array} hits
-   *   The letters in the guess word which have been found
-   * @return {Hangman.View}
-   */
-  drawBoardLetters: function (letters, hits) {
-    this.board.empty();
-    letters.forEach(function (letter, index) {
-      var input = $('<div>').addClass('letter');
-      if (hits.indexOf(letter) !== -1) {
-        input.html(letter);
-      } else {
-        input.html('&nbsp;');
-      }
-      this.board.append(input);
-    }, this);
-    return this;
-  },
-
-  /**
-   * Show used letters at the bottom of the board.
-   *
-   * Implementation:
-   *   1. Set innerHTML of misses element to the letters, joined by commas.
-   *   2. Return self to allow chaining.
-   *
-   * @param {Array} letters
-   *   The letters to display as being used.
-   * @return {Hangman.View}
-   */
-  drawMissedLetters: function (letters) {
-    this.misses.html(letters.join(', '));
-    return this;
-  },
-
-  /**
-   * Show a won or lost message depending on the game state.
-   *
-   * Implementation:
-   *   1. If status is Hangman.WON, hide input element and show won element.
-   *   2. If status is Hangman.LOST, hide input element and show lost element.
-   *   3. If status is anything else, hide won and lost elements and show input.
-   *   4. Return self to allow chaining.
-   *
-   * @param {String} status
-   *   A string representing the status of the game.
-   * @return {Hangman.View}
-   */
-  drawWinOrLose: function (status) {
-    if (status === Hangman.WON) {
-      this.input.hide();
-      this.won.show();
-    } else if (status === Hangman.LOST) {
-      this.input.hide();
-      this.lost.show();
+/**
+ * Build the letter boxes that appear at the bottom of the canvas.
+ *
+ * Implementation:
+ *   1. Empty the board element.
+ *   2. Create a div element with a class of ".letter".
+ *   2. Iterate over the provided letters. Do the following with each:
+ *        - Clone the the div created in step #2.
+ *        - If letter is in hits, set innerHTML of div to the letter.
+ *        - If not, set innerHTML of div to "&nbsp;".
+ *        - Append div to the board element.
+ *   3. Return self to allow chaining.
+ *
+ * @param {Array} letters
+ *   The word to guess as an array of characters.
+ * @param {Array} hits
+ *   The letters in the guess word which have been found
+ * @return {Hangman.View}
+ */
+Hangman.View.prototype.drawBoardLetters = function (letters, hits) {
+  this.board.empty();
+  var item = $('<div class="letter">');
+  letters.forEach(function (letter, index) {
+    var div = item.clone();
+    if (hits.indexOf(letter) !== -1) {
+      div.html(letter);
     } else {
-      this.input.show();
-      this.won.hide();
-      this.lost.hide();
+      div.html('&nbsp;');
     }
-    return this;
-  },
-
-  /**
-   * Draw a fabric.js object on the view's canvas.
-   *
-   * Implementation:
-   *   1. Add passed object to canvas.
-   *   2. Return self to allow chaining.
-   *
-   * @param {fabric.*} item
-   *   A fabric canvas object.
-   * @return {Hangman.View}
-   */
-  draw: function (ob) {
-    this.canvas.add(ob);
-    return this;
-  },
-
-  /**
-   * Find a step by name and draw on the view's canvas.
-   *
-   * Implementation:
-   *   1. Take passed step and see if there is a matching method on the view.
-   *   2. If it is, invoke the method and pass the result to `this.draw`.
-   *   3. Return self to allow chaining.
-   *
-   * @param {String) step
-   *   The name of the step to draw.
-   * @return {Hangman.View}
-   */
-  drawStep: function (name) {
-    var step = Hangman.View[name];
-    if (step) {
-      var ob = step();
-      this.draw(ob);
-    }
-    return this;
-  },
-
-  /**
-   * Draw a specified number objects from the step listing on the view's
-   * canvas.
-   *
-   * Implementation:
-   *   1. Starting at zero, count up until you reach the passed number.
-   *   2. For each number, do the following:
-   *      - Find the name of the step by checking `this.step[#]`
-   *      - Call `this.drawStep` with the name.
-   *   3. Return self to allow chaining.
-   *
-   * @param {Integer) number
-   *   The number of steps to draw.
-   * @return {Hangman.View}
-   */
-  drawToStep: function (number) {
-    for (var idx=0; idx < number; idx++) {
-      var step = this.steps[idx];
-      this.drawStep(step);
-    }
-    return this;
-  },
-
-  /**
-   * Build the game board.
-   *
-   * Implementation:
-   *   1. Clear the guess field.
-   *   2. Clear the misses element.
-   *   3. Clear the board element.
-   *   4. Clear the canvas.
-   *   5. Call `this.drawBoardLetters` with correct data from context.
-   *   6. Call `this.drawMissedLetters` with correct data from context.
-   *   7. Call `this.drawToStep` with correct data from context.
-   *   8. Call `this.drawWinOrLoss` with correct data from context.
-   *   9. Return self to allow chaining.
-   *
-   * @param {Object} context
-   *   @param {Array} context.guessWordLetters
-   *     The word being guessed, as an array of characters.
-   *   @param {Array} context.hits
-   *     The matching letters which have been guessed so far.
-   *   @param {Array} context.misses
-   *     The missed letters which have been guessed so far.
-   *   @param {Boolean} context.status
-   *     The state of the game.  One of the following:
-   *     Hangman.WON, Hangman.LOST or Hangman.Playing
-   * @return {Hangman.View}
-   *   Self for chaining.
-   */
-  refreshBoard: function (context) {
-    this.guessField.val('');
-    this.misses.empty();
-    this.board.empty();
-    this.canvas.clear();
-    this.drawBoardLetters(context.guessWordLetters, context.hits);
-    this.drawMissedLetters(context.misses);
-    this.drawToStep(context.missCount);
-    this.drawWinOrLose(context.status);
-    return this;
-  },
+    this.board.append(div);
+  }, this);
+  return this;
 };
+
+/**
+ * Show used letters at the bottom of the board.
+ *
+ * Implementation:
+ *   1. Set innerHTML of misses element to the letters, joined by commas.
+ *   2. Return self to allow chaining.
+ *
+ * @param {Array} letters
+ *   The letters to display as being used.
+ * @return {Hangman.View}
+ */
+Hangman.View.prototype.drawMissedLetters = function (letters) {
+  this.misses.html(letters.join(', '));
+  return this;
+};
+
+/**
+ * Show a won or lost message depending on the game state.
+ *
+ * Implementation:
+ *   1. If status is Hangman.WON, hide input element and show won element.
+ *   2. If status is Hangman.LOST, hide input element and show lost element.
+ *   3. If status is anything else, hide won and lost elements and show input.
+ *   4. Return self to allow chaining.
+ *
+ * @param {String} status
+ *   A string representing the status of the game.
+ * @return {Hangman.View}
+ */
+Hangman.View.prototype.drawWinOrLose = function (status) {
+  if (status === Hangman.WON) {
+    this.input.hide();
+    this.won.show();
+  } else if (status === Hangman.LOST) {
+    this.input.hide();
+    this.lost.show();
+  } else {
+    this.input.show();
+    this.won.hide();
+    this.lost.hide();
+  }
+  return this;
+};
+
+/**
+ * Draw a fabric.js object on the view's canvas.
+ *
+ * Implementation:
+ *   1. Add passed object to canvas.
+ *   2. Return self to allow chaining.
+ *
+ * @param {fabric.*} item
+ *   A fabric canvas object.
+ * @return {Hangman.View}
+ */
+Hangman.View.prototype.draw = function (ob) {
+  this.canvas.add(ob);
+  return this;
+};
+
+/**
+ * Find a step by name and draw on the view's canvas.
+ *
+ * Implementation:
+ *   1. Take passed step and see if there is a matching method on the view.
+ *   2. If it is, invoke the method and pass the result to `this.draw`.
+ *   3. Return self to allow chaining.
+ *
+ * @param {String) step
+ *   The name of the step to draw.
+ * @return {Hangman.View}
+ */
+Hangman.View.prototype.drawStep = function (name) {
+  var step = Hangman.View[name];
+  if (step) {
+    var ob = step();
+    this.draw(ob);
+  }
+  return this;
+};
+
+/**
+ * Draw a specified number objects from the step listing on the view's
+ * canvas.
+ *
+ * Implementation:
+ *   1. Starting at zero, count up until you reach the passed number.
+ *   2. For each number, do the following:
+ *      - Find the name of the step by checking `this.step[#]`
+ *      - Call `this.drawStep` with the name.
+ *   3. Return self to allow chaining.
+ *
+ * @param {Integer) number
+ *   The number of steps to draw.
+ * @return {Hangman.View}
+ */
+Hangman.View.prototype.drawToStep = function (number) {
+  for (var idx=0; idx < number; idx++) {
+    var step = this.steps[idx];
+    this.drawStep(step);
+  }
+  return this;
+};
+
+/**
+ * Build the game board.
+ *
+ * Implementation:
+ *   1. Clear the guess field.
+ *   2. Clear the misses element.
+ *   3. Clear the board element.
+ *   4. Clear the canvas.
+ *   5. Call `this.drawBoardLetters` with correct data from context.
+ *   6. Call `this.drawMissedLetters` with correct data from context.
+ *   7. Call `this.drawToStep` with correct data from context.
+ *   8. Call `this.drawWinOrLoss` with correct data from context.
+ *   9. Return self to allow chaining.
+ *
+ * @param {Object} context
+ *   @param {Array} context.guessWordLetters
+ *     The word being guessed, as an array of characters.
+ *   @param {Array} context.hits
+ *     The matching letters which have been guessed so far.
+ *   @param {Array} context.misses
+ *     The missed letters which have been guessed so far.
+ *   @param {Boolean} context.status
+ *     The state of the game.  One of the following:
+ *     Hangman.WON, Hangman.LOST or Hangman.Playing
+ * @return {Hangman.View}
+ *   Self for chaining.
+ */
+Hangman.View.prototype.refreshBoard = function (context) {
+  this.guessField.val('');
+  this.misses.empty();
+  this.board.empty();
+  this.canvas.clear();
+  this.drawBoardLetters(context.guessWordLetters, context.hits);
+  this.drawMissedLetters(context.misses);
+  this.drawToStep(context.missCount);
+  this.drawWinOrLose(context.status);
+  return this;
+};
+
 
 /**
  * Build a fabric.Line to represent the top of the gallows.

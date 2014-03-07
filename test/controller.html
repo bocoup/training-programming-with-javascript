@@ -28,7 +28,7 @@
       controller = new Hangman.Controller(model, view);
       spies = {
         model: {
-          serialize: sinon.spy(model, 'serialize')
+          data: sinon.spy(model, 'data')
         },
         view: {
           refreshBoard: sinon.spy(view, 'refreshBoard')
@@ -44,8 +44,8 @@
     describe('#refreshGame', function () {
       it('should refresh the game view with data from the model', function () {
         controller.refreshGame();
-        expect(spies.model.serialize.called).to.be.true;
-        expect(spies.view.refreshBoard.calledWith(model.serialize())).to.be.true;
+        expect(spies.model.data.called).to.be.true;
+        expect(spies.view.refreshBoard.calledWith(model.data())).to.be.true;
       });
     });
 

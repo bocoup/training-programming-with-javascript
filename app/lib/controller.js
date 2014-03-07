@@ -24,55 +24,47 @@ Hangman.Controller = function (model, view) {
 };
 
 /**
- * The Controller prototype. Methods and properties defined in this
- * object will be shared by all instances of Hangman.Controller.
+ * Tell the view to draw the game board using data from our model.
+ *
+ * Implementation:
+ *   1. Extract the game state from the model.
+ *   2. Call refreshBoard on the view using the serialized data.
  */
-Hangman.Controller.prototype = {
+Hangman.Controller.prototype.refreshGame = function () {
+  this.view.refreshBoard(this.model.data());
+};
 
-  /**
-   * Tell the view to draw the game board using data from our model.
-   *
-   * Implementation:
-   *   1. Serialize the game state from the model.
-   *   2. Call refreshBoard on the view using the serialized data.
-   */
-  refreshGame: function () {
-    this.view.refreshBoard(this.model.serialize());
-  },
+/**
+ * Process a guess from the game.
+ *
+ * Implementation:
+ *   1. Call guess method on model using the passed letter.
+ *   2. Call refreshGame method to update the board.
+ *
+ * @param {String} letter
+ *   The letter to guess.
+ */
+Hangman.Controller.prototype.guess = function (letter) {
+  this.model.guess(letter);
+  this.refreshGame();
+};
 
-  /**
-   * Process a guess from the game.
-   *
-   * Implementation:
-   *   1. Call guess method on model using the passed letter.
-   *   2. Call refreshGame method to update the board.
-   *
-   * @param {String} letter
-   *   The letter to guess.
-   */
-  guess: function (letter) {
-    this.model.guess(letter);
-    this.refreshGame();
-  },
-
-  /**
-   * Initialize the game board.
-   *
-   * Implementation:
-   *   1. Call refreshGame for initial board setup.
-   *   2. Create a click handler for on the view's button.
-   *      It should get the current letter and call guess
-   *      on the controller using it.
-   *   3. Derive the maximum number of steps to lose a game
-   *      from the view and set maxMisses on the model to
-   *      that number.
-   */
-  start: function () {
-    this.refreshGame();
-    this.view.button.click(function () {
-      this.guess(this.view.guessField.val());
-    }.bind(this));
-    this.model.maxMisses = this.view.steps.length;
-  }
-
+/**
+ * Initialize the game board.
+ *
+ * Implementation:
+ *   1. Call refreshGame for initial board setup.
+ *   2. Create a click handler for on the view's button.
+ *      It should get the current letter and call guess
+ *      on the controller using it.
+ *   3. Derive the maximum number of steps to lose a game
+ *      from the view and set maxMisses on the model to
+ *      that number.
+ */
+Hangman.Controller.prototype.start = function () {
+  this.refreshGame();
+  this.view.button.click(function () {
+    this.guess(this.view.guessField.val());
+  }.bind(this));
+  this.model.maxMisses = this.view.steps.length;
 };
