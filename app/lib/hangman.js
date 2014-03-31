@@ -12,7 +12,8 @@
  * @return {Hangman.Controller}
  */
 function Hangman(el) {
-  var model = new Hangman.Model(Hangman.randomElement(Hangman.WORDLIST));
+  var word = Hangman.randomElement(Hangman.WORDLIST)
+  var model = new Hangman.Model(word);
   var view = new Hangman.View(el);
   return new Hangman.Controller(model, view);
 }
@@ -44,9 +45,9 @@ Hangman.PLAYING = 'playing';
  *   An array of possible words to select.
  * @return {String}
  */
-Hangman.randomElement = function (array) {
+Hangman.randomElement = function (wordlist) {
   var randomNumber = Math.random();
-  var maxSize = array.length;
+  var maxSize = wordlist.length;
   var index = Math.floor(randomNumber*maxSize);
-  return array[index];
+  return wordlist[index];
 };
