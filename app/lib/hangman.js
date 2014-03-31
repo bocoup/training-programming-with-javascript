@@ -12,7 +12,7 @@
  * @return {Hangman.Controller}
  */
 function Hangman(el) {
-  var word = Hangman.randomElement(Hangman.WORDLIST)
+  var word = Hangman.randomElement(Hangman.WORDLIST);
   var model = new Hangman.Model(word);
   var view = new Hangman.View(el);
   return new Hangman.Controller(model, view);
