@@ -26,14 +26,14 @@ Hangman.Model = function (word) {
   this.maxMisses = null;
 };
 
-  /**
-   * Get array of letters from guessWord.
-   *
-   * Implementation:
-   *   1. Return `this.guessWord` as an array of characters.
-   *
-   * @return {Array}
-   */
+/**
+ * Get array of letters from guessWord.
+ *
+ * Implementation:
+ *   1. Return `this.guessWord` as an array of characters.
+ *
+ * @return {Array}
+ */
 Hangman.Model.prototype.guessWordLetters = function () {
   return this.guessWord.split('');
 };
