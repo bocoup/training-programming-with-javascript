@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <link rel='stylesheet' href='../vendor/test/mocha.css'>
+  <script src='../vendor/test/mocha-1.17.1.js'></script>
+  <script src='../vendor/test/chai-1.9.0.js'></script>
+  <script src='../vendor/jquery-2.1.0.js'></script>
+  <script src='../app/hangman.js'></script>
+  <script src='//localhost:35729/livereload.js'></script>
+  <script>
+  var expect = chai.expect;
+  mocha.setup('bdd');
+  $(mocha.run);
+
+  describe('Hangman', function() {
+
+    beforeEach(function () {
+      guessWord = 'hangman';
+      hits = [];
+      misses = [];
+    });
+
+    describe('validateGuess', function () {
+      it('should return true if a guess is valid', function () {
+        expect(validateGuess(1)).to.be.false;
+        expect(validateGuess('')).to.be.false;
+        expect(validateGuess(' ')).to.be.false;
+        expect(validateGuess('aa')).to.be.false;
+        expect(validateGuess('c')).to.be.true;
+        expect(validateGuess('a')).to.be.true;
+      });
+    });
+
+    describe('guess', function () {
+      it('should add a valid guess to the hits array if it does appear in the guessWord', function () {
+        guess('z');
+        expect(hits).to.have.length(0);
+        guess('a');
+        expect(hits[0]).to.equal('a');
+        guess('a');
+        expect(hits).to.have.length(1);
+      });
+
+      it('should add a valid guess to the missed array if it does not appear in the guessWord', function () {
+        guess('z');
+        expect(hits).to.have.length(0);
+        guess('a');
+        expect(hits[0]).to.equal('a');
+        guess('a');
+        expect(hits).to.have.length(1);
+      });
+
+      it('should return true if the guess was a valid hit', function () {
+        expect(guess('a')).to.be.true;
+        expect(guess('a')).to.be.false;
+      });
+    });
+
+    describe('guesses', function () {
+      it('should return a combination of all hits and misses', function () {
+        guess('a');
+        guess('b');
+        expect(guesses()).to.deep.equal(['a','b']);
+      });
+    });
+
+    describe('won', function () {
+      it('should return true if the game is in a winning state', function () {
+        expect(won()).to.be.false;
+        hits = ['h','a','n','g','m','n'];
+        expect(won()).to.be.true;
+      });
+    });
+
+    describe('lost', function () {
+      it('should return true if the game is in a losing state', function () {
+        maxMisses = 1;
+        expect(lost()).to.be.false;
+        misses = ['h'];
+        expect(lost()).to.be.true;
+      });
+    });
+
+    describe('state', function () {
+      it('should return "won" if the game is in a winning state', function () {
+        hits = ['h','a','n','g','m','n'];
+        expect(state()).to.equal('won');
+      });
+      it('should return "lost" if the game is in a losing state', function () {
+        hits = [];
+        misses = ['z','y','x','w','v','u','t','s'];
+        expect(state()).to.equal('lost');
+      });
+      it('should return "playing" if the game is neither lost nor won', function () {
+        hits = [];
+        misses = [];
+        expect(state()).to.equal('playing');
+      });
+    });
+
+  });
+  </script>
+</head>
+<body>
+  <div id='mocha'></div>
+  <div id='test'></div>
+</body>
+</html>

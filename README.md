@@ -1,11 +1,10 @@
 # programming-with-javascript
 > Learn javascript basics by writing a hangman game.
 
-# Setup
+## Setup Instructions
 
-1. Clone repository.
-2. `npm install`
-3. `npm install -g grunt-cli`
-4. `grunt`
-5. To play game, open http://localhost:8000
-6. To view tests, open http://localhost:8000/test
+1. `npm install`
+2. `npm install -g grunt-cli`
+3. Start auto-reloading web-server for your exercise by running `grunt`.
+4. Open [http://localhost:8000](http://localhost:8000) or [http://localhost:8000/test](http://localhost:8000/test]) in your browser.
+

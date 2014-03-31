@@ -1,33 +1,34 @@
+var fs = require('fs');
 module.exports = function (grunt) {
   grunt.initConfig({
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc'
-      },
-      app: ['app/**/*.js']
-    },
-    connect: {
-      app: {
-        options: {
-          hostname: '*'
-        }
-      }
-    },
     watch: {
       options: {
-        livereload: true
+        livereload: true,
+        spawn: false
       },
-      app: {
-        files: ['index.html', 'app/**/*', 'styles/*']
-      },
-      tests: {
-        files: ['test/**/*']
+      exercises: {
+        files: ['*/app/*.js']
       }
     },
   });
-  grunt.loadNpmTasks('grunt-contrib-jshint');
+  var exclude = ['.git', 'node_modules'];
+  fs.readdirSync('./').forEach(function (dir) {
+    if(fs.lstatSync(dir).isDirectory() && exclude.indexOf(dir) === -1) {
+      var taskName = dir.substring(3);
+      grunt.config(['connect',taskName], {
+        options: {
+          base: dir
+        }
+      });
+      grunt.registerTask(taskName, ['connect:'+taskName, 'watch']);
+    }
+  });
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.registerTask('default', function () {
+    var exercises = Object.keys(grunt.config('connect'));
+    grunt.log.fail('Please run grunt with an exercise name:');
+    grunt.log.writeln('grunt '+exercises.join('\ngrunt '));
+  });
 
-  grunt.registerTask('default', ['jshint', 'connect:app', 'watch']);
 };

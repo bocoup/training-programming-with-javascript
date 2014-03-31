@@ -108,7 +108,7 @@
         expect(data.guessWordLetters).to.deep.equal(['h', 'a', 'n', 'g', 'm', 'a', 'n']);
         expect(data.hits).to.deep.equal(['a']);
         expect(data.misses).to.deep.equal(['b']);
-        expect(data.status).to.equal(Hangman.PLAYING);
+        expect(data.state).to.equal(Hangman.PLAYING);
       });
     });
   });

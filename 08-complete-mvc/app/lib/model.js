@@ -72,9 +72,10 @@ Hangman.Model.prototype.validateGuess = function (letter) {
  * Validate a guess and store in on the model.
  *
  * Implementation:
- *   1. Return false if guessed letter doesn't pass `validateGuess`.
- *   2. If letter appears in guess word, add it to hits and return true.
- *   3. Otherwise, add it to misses and return false.
+ *   1. Convert letter to lowercase.
+ *   2. Return false if guessed letter doesn't pass `validateGuess`.
+ *   3. If letter appears in guess word, add it to hits and return true.
+ *   4. Otherwise, add it to misses and return false.
  *
  * @param {String} guess
  *   The letter to guess with.
@@ -88,9 +89,8 @@ Hangman.Model.prototype.guess = function (letter) {
   if (this.guessWord.indexOf(letter) !== -1) {
     this.hits.push(letter);
     return true;
-  } else {
-    this.misses.push(letter);
   }
+  this.misses.push(letter);
   return false;
 };
 
@@ -134,7 +134,7 @@ Hangman.Model.prototype.lost = function () {
  *
  * @return {String}
  */
-Hangman.Model.prototype.status = function () {
+Hangman.Model.prototype.state = function () {
   if (this.won()) {
     return Hangman.WON;
   }
@@ -165,6 +165,6 @@ Hangman.Model.prototype.data = function () {
     hits: this.hits.slice(),
     misses: this.misses.slice().sort(),
     missCount: this.misses.length,
-    status: this.status()
+    state: this.state()
   };
 };
