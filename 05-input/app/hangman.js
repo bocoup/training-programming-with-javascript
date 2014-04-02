@@ -159,12 +159,7 @@ var state = function () {
  *
  */
 var promptGuess = function () {
-  if (state() !== 'playing') {
-    alert('The game is over.');
-  } else {
-    var letter = prompt('Enter your guess:');
-    guess(letter);
-  }
+
 };
 
 /**
