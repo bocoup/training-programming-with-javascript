@@ -31,7 +31,6 @@
 - [Call a function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions#Calling_functions) with a parameter
 - [return a value](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope#Example:_Returning_a_formatted_number) from a function
 - define a [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions#Defining_functions) that takes an argument
-- define a [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions#Defining_functions) that takes an argument
 - define a [function that returns a value](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope#Example:_Returning_a_formatted_number)
 - refactor a function into multiple functions to improve flexibility 
 
