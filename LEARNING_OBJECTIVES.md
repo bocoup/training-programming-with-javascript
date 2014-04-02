@@ -7,7 +7,7 @@
 
 ### Arithmetic Operators and the Math Object
 - Use [`Math.random()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random) to generate a random number (00)
-- use the [`floor` function in the `Math` library](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor) (01)
+- use the [`floor` method of the `Math` Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor) to round a number (01)
 - use [arithmetic operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators) on variables (01)
 - use the [`++` shorthand](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Arithmetic_operators) to increment a value (03)
 
