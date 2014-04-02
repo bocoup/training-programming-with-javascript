@@ -30,3 +30,9 @@ h3{
   position: absolute;
   right: 10px;
 }
+
+code {
+  background-color: #f1f1f1;
+  padding: 1px;
+  border: #dddde0 solid 1px;
+}
