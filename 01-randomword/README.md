@@ -11,7 +11,6 @@ Students will write logic to select a random element from an array.
 - [access a value in an array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#Accessing_array_elements) using bracket notation and an index
 - use the [`floor` function in the `Math` library](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor)
 - use [arithmetic operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators) on variables
-- define a [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions#Defining_functions) that takes an argument
-- define a [function that returns a value](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope#Example:_Returning_a_formatted_number)
+- [returns a value] from a function(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope#Example:_Returning_a_formatted_number)
 - [call a function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions#Calling_functions) you've created, with a parameter
 - store the return value of a function call in a variable
