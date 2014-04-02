@@ -1,0 +1,32 @@
+body {
+  font-family: Open Sans, Helvetica, Arial, sans-serif;
+}
+
+h1, h2 {
+  font-family: "OFL Sorts Mill Goudy TT", serif;
+}
+
+.nav li {
+  display:inline;
+  padding: 10px 20px;
+}
+
+.nav {
+  min-height: 50px;
+}
+
+h3{
+  display: inline;
+}
+
+.download {
+  margin-left: 10px;
+}
+
+#bob {
+  background-image: url("logo.png");
+  width: 292px;
+  height: 450px;
+  position: fixed;
+  right: 10px;
+}
