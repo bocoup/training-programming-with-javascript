@@ -86,7 +86,7 @@ body {
   background-color: #bc3332;
 }
 
-.hangman .board {
+.hangman .letters {
   position: relative;
   text-align: center;
   margin-bottom: 25px;

@@ -8,10 +8,20 @@
   <link href="styles/hangman.css" rel="stylesheet">
 </head>
 <body>
-  <h1>Hangman in HTML, CSS &amp; Javascript</h1>
-  <div id="hangman"></div>
-  <br><br>
-  <input type="button" value="GUESS" onclick="promptGuess()">
+  <div id="hangman">
+    <div id="wrap">
+      <h1>Hangman in HTML, CSS &amp; Javascript</h1>
+      <div id="canvas"></div>
+      <div id="won"><h1>You Won!</h1></div>
+      <div id="lost"><h1>You Lost :(</h1></div>
+      <div id="input">
+        <button onclick="promptGuess()">Guess a Letter</button>
+      </div>
+      <div id="used">
+        <span id="misses"></span><span id="title">Missed Letters</span>
+      </div>
+    </div>
+  </div>
   <script src="app/hangman.js"></script>
   <script src="//localhost:35729/livereload.js"></script>
 </body>

@@ -1,4 +1,4 @@
-var words = ['abbey', 'bagpipes', 'cobweb', 'daiquiri', 'equip', 'fishhook', 'galaxy', 'haiku', 'icebox', 'jaundice', 'kazoo', 'larynx', 'marquis', 'nowadays', 'ovary', 'pajama', 'quartz', 'rhubarb', 'sphinx', 'topaz', 'unknown', 'vaporize', 'walkway', 'yippee', 'xylophone', 'zephyr'];
+var words = ['ABBEY', 'BAGPIPES', 'COBWEB', 'DAIQUIRI', 'EQUIP', 'FISHHOOK', 'GALAXY', 'HAIKU', 'ICEBOX', 'JAUNDICE', 'KAZOO', 'LARYNX', 'MARQUIS', 'NOWADAYS', 'OVARY', 'PAJAMA', 'QUARTZ', 'RHUBARB', 'SPHINX', 'TOPAZ', 'UNKNOWN', 'VAPORIZE', 'WALKWAY', 'YIPPEE', 'XYLOPHONE', 'ZEPHYR'];
 
 /**
  * Randomly select an element from a provided array.
@@ -61,7 +61,7 @@ var maxMisses = drawing.length;
  * Implementation:
  *   1. Return false if guess is blank or undefined.
  *   2. Return false if guess is more than one character.
- *   3. Return false if guess is not a lower-case letter.
+ *   3. Return false if guess is not an upper-case letter.
  *   4. Return false if guess is has already been made.
  *   5. Return true if you made it this far, the guess is valid!
  *
@@ -70,10 +70,10 @@ var maxMisses = drawing.length;
  * @return {Boolean}
  */
 var validateGuess = function (letter) {
-  var isSingleLowercaseLetter = /^[a-z]$/.test(letter);
+  var isSingleUppercaseLetter = /^[A-Z]$/.test(letter);
   var inHits = hits.indexOf(letter) !== -1;
   var inMisses = misses.indexOf(letter) !== -1;
-  if (isSingleLowercaseLetter && !inHits && !inMisses) {
+  if (isSingleUppercaseLetter && !inHits && !inMisses) {
     return true;
   }
   return false;
@@ -93,7 +93,7 @@ var validateGuess = function (letter) {
  * @return {Boolean}
  */
 var guess = function (letter) {
-  letter = letter.toLowerCase();
+  letter = letter.toUpperCase();
   if (!validateGuess(letter)) {
     return false;
   }
@@ -202,14 +202,43 @@ var board = function () {
  * Continuously update the game board.
  */
 var refresh = function () {
-  var game = document.getElementById('hangman');
-  var html = [];
-  html.push(board()+'<br>');
-  html.push('<u>The Word</u><br><strong>'+guessWord+'</strong>');
-  html.push('<u>Correct Guesses</u><br><strong>'+hits.join(', ')+'</strong>');
-  html.push('<u>Incorrect Guesses</u><br><strong>'+misses.join(', ')+'</strong>');
-  html.push('<u>Game State</u><strong><br>'+state()+'</strong>');
-  game.innerHTML = html.join('<br><br>');
+  var game = document.getElementById('canvas');
+  var letters = document.getElementById('letters');
+  var missedLetters = document.getElementById('misses');
+  var guessButton = document.getElementById('input');
+  var wonMessage = document.getElementById('won');
+  var lostMessage = document.getElementById('lost');
+  var gameState = state();
+
+  game.innerHTML = board();
+  missedLetters.innerHTML = misses.join(', ');
+
+  if (gameState === 'playing') {
+    guessButton.style.display = 'block';
+    wonMessage.style.display = 'none';
+    lostMessage.style.display = 'none';
+  }
+  if (gameState === 'won') {
+    guessButton.style.display = 'none';
+    wonMessage.style.display = 'block';
+    lostMessage.style.display = 'none';
+  }
+  if (gameState === 'lost') {
+    guessButton.style.display = 'none';
+    wonMessage.style.display = 'none';
+    lostMessage.style.display = 'block';
+  }
+
+  var letterHTML = [];
+  var guessWordLetters = guessWord.split('');
+  guessWordLetters.forEach(function (letter, index) {
+    if (hits.indexOf(letter) !== -1) {
+      letterHTML.push('<div class="letter">'+letter+'</div>');
+    } else {
+      letterHTML.push('<div class="letter">&nbsp;</div>');
+    }
+  });
+  letters.innerHTML = letterHTML.join('');
 };
 
 setInterval(refresh, 100);
