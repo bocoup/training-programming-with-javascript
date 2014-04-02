@@ -37,23 +37,9 @@ var hits = [];
 var misses = [];
 
 /*
- * Assign the drawing to use when the player misses.  The number of
- * elements in this array will be used to determine how many times
- * a player can guess incorrectly before losing the game.
- *
+ * Calculate the maximum number of steps before a player loses.
  */
-var drawing = [
-  '===========',
-  '     |     ',
-  '     O     ',
-  '   --|--   ',
-  '    /\\    '
-];
-
-/*
- * Calculate the maximum number of steps before you lose.
- */
-var maxMisses = drawing.length;
+var maxMisses = 5;
 
 /**
  * Determine whether a provided guess is a valid.
@@ -88,7 +74,7 @@ var validateGuess = function (letter) {
  *   3. If letter appears in guess word, add it to hits and return true.
  *   4. Otherwise, add it to misses and return false.
  *
- * @param {String} letter
+ * @param {String} guess
  *   The letter to guess with.
  * @return {Boolean}
  */
@@ -182,29 +168,11 @@ var promptGuess = function () {
 };
 
 /**
- * Return the section of the board to draw.
- *
- * Implementation:
- *   1. Determine how many steps to draw from the misses array.
- *   2. Extract the correct items from the drawing variable.
- *   3. Return a string that is each portion of the drawing, separated
- *      by a line break (<br>).
- *
- * @return {String}
- */
-var board = function () {
-  var steps = misses.length;
-  var lines = drawing.slice(0, steps);
-  return lines.join('<br>');
-};
-
-/**
  * Continuously update the game board.
  */
 var refresh = function () {
   var game = document.getElementById('hangman');
   var html = [];
-  html.push(board()+'<br>');
   html.push('<u>The Word</u><br><strong>'+guessWord+'</strong>');
   html.push('<u>Correct Guesses</u><br><strong>'+hits.join(', ')+'</strong>');
   html.push('<u>Incorrect Guesses</u><br><strong>'+misses.join(', ')+'</strong>');

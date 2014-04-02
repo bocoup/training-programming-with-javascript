@@ -70,9 +70,13 @@ var maxMisses = drawing.length;
  * @return {Boolean}
  */
 var validateGuess = function (letter) {
-  return /^[a-z]$/.test(letter) &&
-    hits.indexOf(letter) === -1 &&
-    misses.indexOf(letter) === -1;
+  var isSingleLowercaseLetter = /^[a-z]$/.test(letter);
+  var inHits = hits.indexOf(letter) !== -1;
+  var inMisses = misses.indexOf(letter) !== -1;
+  if (isSingleLowercaseLetter && !inHits && !inMisses) {
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -157,6 +161,24 @@ var state = function () {
     return 'lost';
   }
   return 'playing';
+};
+
+/**
+ * Accept a guess for the game.
+ *
+ * Implementation:
+ *   1. If the game state is not playing, alert that the game is over.
+ *   2. If the game state is playing, prompt for a guess and pass the
+ *      resulting letter to the guess method.
+ *
+ */
+var promptGuess = function () {
+  if (state() !== 'playing') {
+    alert('The game is over.');
+  } else {
+    var letter = prompt('Enter your guess:');
+    guess(letter);
+  }
 };
 
 /**
