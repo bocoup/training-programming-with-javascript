@@ -74,9 +74,11 @@ var guess = function (letter) {
 /**
  * Continuously update the game board.
  */
-setInterval(function () {
+var refresh = function () {
   var game = document.getElementById('hangman');
   game.innerHTML = '<u>Guess Word</u><br><strong>'+guessWord+'</strong><br><br>';
   game.innerHTML += '<u>Correct Guesses</u><br><strong>'+hits.join(', ')+'</strong><br><br>';
   game.innerHTML += '<u>Incorrect Guesses</u><br><strong>'+misses.join(', ')+'</strong><br><br>';
-}, 100);
+};
+
+setInterval(refresh, 100);

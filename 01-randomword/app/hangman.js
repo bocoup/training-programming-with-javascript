@@ -21,7 +21,9 @@ var randomElement = function (wordlist) {
 /**
  * Continuously update the game board.
  */
-setInterval(function () {
+var refresh = function () {
   var game = document.getElementById('hangman');
   game.innerHTML = '<u>Guess Word</u><br><strong>'+randomElement(words)+'</strong>';
-}, 100);
+};
+
+setInterval(refresh, 100);

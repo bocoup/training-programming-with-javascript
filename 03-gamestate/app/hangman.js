@@ -120,7 +120,7 @@ var state = function () {
 /**
  * Continuously update the game board.
  */
-setInterval(function () {
+var refresh = function () {
   var game = document.getElementById('hangman');
   var html = [];
   html.push('<u>The Word</u><br><strong>'+guessWord+'</strong>');
@@ -128,4 +128,6 @@ setInterval(function () {
   html.push('<u>Incorrect Guesses</u><br><strong>'+misses.join(', ')+'</strong>');
   html.push('<u>Game State</u><strong><br>'+state()+'</strong>');
   game.innerHTML = html.join('<br><br>');
-}, 100);
+};
+
+setInterval(refresh, 100);
