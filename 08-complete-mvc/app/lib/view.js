@@ -125,11 +125,11 @@ Hangman.View.prototype.drawMissedLetters = function (letters) {
  *   A string representing the status of the game.
  * @return {Hangman.View}
  */
-Hangman.View.prototype.drawWinOrLose = function (status) {
-  if (status === Hangman.WON) {
+Hangman.View.prototype.drawWinOrLose = function (state) {
+  if (state === Hangman.WON) {
     this.input.hide();
     this.won.show();
-  } else if (status === Hangman.LOST) {
+  } else if (state === Hangman.LOST) {
     this.input.hide();
     this.lost.show();
   } else {
@@ -235,7 +235,7 @@ Hangman.View.prototype.refreshBoard = function (context) {
   this.drawBoardLetters(context.guessWordLetters, context.hits);
   this.drawMissedLetters(context.misses);
   this.drawToStep(context.missCount);
-  this.drawWinOrLose(context.status);
+  this.drawWinOrLose(context.state);
   return this;
 };
 
