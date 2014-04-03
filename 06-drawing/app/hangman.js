@@ -193,9 +193,7 @@ var promptGuess = function () {
  * @return {String}
  */
 var board = function () {
-  var steps = misses.length;
-  var lines = drawing.slice(0, steps);
-  return lines.join('<br>');
+
 };
 
 /**
