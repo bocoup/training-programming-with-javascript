@@ -45,39 +45,40 @@
         expect(validateGuess(' ')).to.be.false;
         expect(validateGuess('aa')).to.be.false;
         expect(validateGuess('C')).to.be.true;
-        expect(validateGuess('A')).to.be.true;
+        guess('A');
+        expect(validateGuess('A')).to.be.false;
       });
     });
 
     describe('guess', function () {
       it('should add a valid guess to the hits array if it does appear in the guessWord', function () {
-        guess('z');
+        guess('Z');
         expect(hits).to.have.length(0);
-        guess('a');
+        guess('A');
         expect(hits[0]).to.equal('A');
-        guess('a');
+        guess('A');
         expect(hits).to.have.length(1);
       });
 
       it('should add a valid guess to the missed array if it does not appear in the guessWord', function () {
-        guess('z');
+        guess('Z');
         expect(hits).to.have.length(0);
-        guess('a');
+        guess('A');
         expect(hits[0]).to.equal('A');
-        guess('a');
+        guess('A');
         expect(hits).to.have.length(1);
       });
 
       it('should return true if the guess was a valid hit', function () {
-        expect(guess('a')).to.be.true;
-        expect(guess('a')).to.be.false;
+        expect(guess('A')).to.be.true;
+        expect(guess('A')).to.be.false;
       });
     });
 
     describe('won', function () {
       it('should return true if the game is in a winning state', function () {
         expect(won()).to.be.false;
-        hits = ['h','a','n','g','m','n'];
+        hits = ['H','A','N','G','M','A','N'];
         expect(won()).to.be.true;
       });
     });
@@ -86,7 +87,7 @@
       it('should return true if the game is in a losing state', function () {
         maxMisses = 1;
         expect(lost()).to.be.false;
-        misses = ['h'];
+        misses = ['H'];
         expect(lost()).to.be.true;
       });
     });

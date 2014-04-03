@@ -51,8 +51,8 @@
 
     describe('#guess', function () {
       it('should send guess to model and refresh game', function () {
-        controller.guess('b');
-        expect(model.misses).to.deep.equal(['b']);
+        controller.guess('B');
+        expect(model.misses).to.deep.equal(['B']);
         expect(spies.controller.refreshGame.called).to.be.true;
       });
     });
@@ -60,10 +60,10 @@
     describe('#start', function () {
       it('should wire guess button to controller and call refreshGame', function () {
         expect(spies.controller.refreshGame.called).to.be.true;
-        view.guessField.val('a');
+        view.guessField.val('A');
         view.button.trigger('click');
         expect(spies.controller.guess.called).to.be.true;
-        expect(spies.controller.guess.calledWith('a')).to.be.true;
+        expect(spies.controller.guess.calledWith('A')).to.be.true;
       });
     });
 
@@ -79,7 +79,7 @@
       <div class="canvas">
         <canvas width="580" height="450"></canvas>
       </div>
-      <div class="board"></div>
+      <div class="letters"></div>
       <div class="won">You Won!</div>
       <div class="lost">You Lost :(</div>
       <div class="input">

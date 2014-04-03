@@ -21,9 +21,9 @@
     beforeEach(function () {
       view = new Hangman.View($('.hangman').clone());
       context = {
-        guessWordLetters: ['h','a','n','g','m','a','n'],
-        hits: ['h'],
-        misses: ['z'],
+        guessWordLetters: ['H','A','N','G','M','A','N'],
+        hits: ['H'],
+        misses: ['Z'],
         missCount: 1,
         status: Hangman.PLAYING
       }
@@ -41,14 +41,14 @@
 
     describe('#refreshBoard', function () {
       it('should clear the guessField', function () {
-        view.guessField.val('a');
+        view.guessField.val('A');
         view.refreshBoard(context);
         expect(view.guessField.val()).to.equal('');
       });
       it('should clear and redraw the misses div', function () {
         view.misses.html('this should not be here');
         view.refreshBoard(context);
-        expect(view.misses.html()).to.equal('z');
+        expect(view.misses.html()).to.equal('Z');
       });
       it('should clear and redraw the canvas', function () {
         context.missCount = 3;
@@ -62,28 +62,28 @@
 
     describe('#drawBoardLetters', function () {
       it('should letter boxes for the game board', function () {
-        view.drawBoardLetters(['h','a','n','g','m','a','n'], ['a']);
-        expect(view.board.find('div').length).to.equal(7);
-        expect(view.board.find('div').eq(0).html()).to.equal('&nbsp;');
-        expect(view.board.find('div').eq(1).html()).to.equal('a');
-        expect(view.board.find('div').eq(2).html()).to.equal('&nbsp;');
-        expect(view.board.find('div').eq(3).html()).to.equal('&nbsp;');
-        expect(view.board.find('div').eq(4).html()).to.equal('&nbsp;');
-        expect(view.board.find('div').eq(5).html()).to.equal('a');
-        expect(view.board.find('div').eq(6).html()).to.equal('&nbsp;');
+        view.drawBoardLetters(['H','A','N','G','M','A','N'], ['A']);
+        expect(view.letters.find('div').length).to.equal(7);
+        expect(view.letters.find('div').eq(0).html()).to.equal('&nbsp;');
+        expect(view.letters.find('div').eq(1).html()).to.equal('A');
+        expect(view.letters.find('div').eq(2).html()).to.equal('&nbsp;');
+        expect(view.letters.find('div').eq(3).html()).to.equal('&nbsp;');
+        expect(view.letters.find('div').eq(4).html()).to.equal('&nbsp;');
+        expect(view.letters.find('div').eq(5).html()).to.equal('A');
+        expect(view.letters.find('div').eq(6).html()).to.equal('&nbsp;');
       });
       it('should be chainable', function () {
-        expect(view.drawBoardLetters(['h','a','n','g','m','a','n'], ['a'])).to.equal(view);
+        expect(view.drawBoardLetters(['H','A','N','G','M','A','N'], ['A'])).to.equal(view);
       });
     });
 
     describe('#drawMissedLetters', function () {
       it('should display missed letters at the bottom of the board', function () {
-        view.drawMissedLetters(['g','z']);
-        expect(view.misses.html()).to.equal('g, z');
+        view.drawMissedLetters(['G','Z']);
+        expect(view.misses.html()).to.equal('G, Z');
       });
       it('should be chainable', function () {
-        expect(view.drawMissedLetters(['g','z'])).to.equal(view);
+        expect(view.drawMissedLetters(['G','Z'])).to.equal(view);
       });
     });
 
@@ -194,7 +194,7 @@
       <div class="canvas">
         <canvas width="580" height="450"></canvas>
       </div>
-      <div class="board"></div>
+      <div class="letters"></div>
       <div class="won" style="display:none">You Won!</div>
       <div class="lost" style="display:none">You Lost :(</div>
       <div class="input">
