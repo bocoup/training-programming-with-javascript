@@ -43,11 +43,11 @@ var misses = [];
  *
  */
 var drawing = [
-  '===========',
-  '     |     ',
-  '     O     ',
-  '   --|--   ',
-  '    /\\    '
+  '...........',
+  '...........',
+  '...........',
+  '...........',
+  '...........'
 ];
 
 /*
@@ -83,7 +83,7 @@ var validateGuess = function (letter) {
  * Validate a guess.
  *
  * Implementation:
- *   1. Convert letter to lowercase.
+ *   1. Convert letter to uppercase.
  *   2. Return false if guessed letter doesn't pass `validateGuess`.
  *   3. If letter appears in guess word, add it to hits and return true.
  *   4. Otherwise, add it to misses and return false.
