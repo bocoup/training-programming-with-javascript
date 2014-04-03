@@ -1,4 +1,4 @@
-var words = ['abbey', 'bagpipes', 'cobweb', 'daiquiri', 'equip', 'fishhook', 'galaxy', 'haiku', 'icebox', 'jaundice', 'kazoo', 'larynx', 'marquis', 'nowadays', 'ovary', 'pajama', 'quartz', 'rhubarb', 'sphinx', 'topaz', 'unknown', 'vaporize', 'walkway', 'yippee', 'xylophone', 'zephyr'];
+var words = ['ABBEY', 'BAGPIPES', 'COBWEB', 'DAIQUIRI', 'EQUIP', 'FISHHOOK', 'GALAXY', 'HAIKU', 'ICEBOX', 'JAUNDICE', 'KAZOO', 'LARYNX', 'MARQUIS', 'NOWADAYS', 'OVARY', 'PAJAMA', 'QUARTZ', 'RHUBARB', 'SPHINX', 'TOPAZ', 'UNKNOWN', 'VAPORIZE', 'WALKWAY', 'YIPPEE', 'XYLOPHONE', 'ZEPHYR'];
 
 /**
  * Randomly select an element from a provided array.
@@ -22,7 +22,7 @@ var randomElement = function (wordlist) {
  * Continuously update the game board.
  */
 var refresh = function () {
-  var game = document.getElementById('hangman');
+  var game = document.getElementById('canvas');
   game.innerHTML = '<u>Guess Word</u><br><strong>'+randomElement(words)+'</strong>';
 };
 

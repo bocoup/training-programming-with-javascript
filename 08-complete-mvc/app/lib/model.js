@@ -56,7 +56,7 @@ Hangman.Model.prototype.guesses = function () {
  * Implementation:
  *   1. Return false if guess is blank or undefined.
  *   2. Return false if guess is more than one character.
- *   3. Return false if guess is not a lower-case letter.
+ *   3. Return false if guess is not an upper-case letter.
  *   4. Return false if guess is has already been made.
  *   5. Return true if you made it this far, the guess is valid!
  *
@@ -65,7 +65,7 @@ Hangman.Model.prototype.guesses = function () {
  * @return {Boolean}
  */
 Hangman.Model.prototype.validateGuess = function (letter) {
-  return /^[a-z]$/.test(letter) && this.guesses().indexOf(letter) === -1;
+  return /^[A-Z]$/.test(letter) && this.guesses().indexOf(letter) === -1;
 };
 
 /**
@@ -82,7 +82,7 @@ Hangman.Model.prototype.validateGuess = function (letter) {
  * @return {Boolean}
  */
 Hangman.Model.prototype.guess = function (letter) {
-  letter = letter.toLowerCase();
+  letter = letter.toUpperCase();
   if (!this.validateGuess(letter)) {
     return false;
   }

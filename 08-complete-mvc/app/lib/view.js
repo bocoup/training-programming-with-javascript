@@ -29,7 +29,7 @@ Hangman.View = function (el) {
   var $el = $(el);
   this.$el = $el;
   this.canvas = new fabric.Canvas($el.find('canvas').get(0));
-  this.board = $el.find('.board');
+  this.letters = $el.find('.letters');
   this.input = $el.find('.input');
   this.won = $el.find('.won');
   this.lost = $el.find('.lost');
@@ -82,7 +82,7 @@ Hangman.View.prototype.steps = [
  * @return {Hangman.View}
  */
 Hangman.View.prototype.drawBoardLetters = function (letters, hits) {
-  this.board.empty();
+  this.letters.empty();
   var item = $('<div class="letter">');
   letters.forEach(function (letter, index) {
     var div = item.clone();
@@ -91,7 +91,7 @@ Hangman.View.prototype.drawBoardLetters = function (letters, hits) {
     } else {
       div.html('&nbsp;');
     }
-    this.board.append(div);
+    this.letters.append(div);
   }, this);
   return this;
 };
@@ -125,11 +125,11 @@ Hangman.View.prototype.drawMissedLetters = function (letters) {
  *   A string representing the status of the game.
  * @return {Hangman.View}
  */
-Hangman.View.prototype.drawWinOrLose = function (status) {
-  if (status === Hangman.WON) {
+Hangman.View.prototype.drawWinOrLose = function (state) {
+  if (state === Hangman.WON) {
     this.input.hide();
     this.won.show();
-  } else if (status === Hangman.LOST) {
+  } else if (state === Hangman.LOST) {
     this.input.hide();
     this.lost.show();
   } else {
@@ -230,12 +230,12 @@ Hangman.View.prototype.drawToStep = function (number) {
 Hangman.View.prototype.refreshBoard = function (context) {
   this.guessField.val('');
   this.misses.empty();
-  this.board.empty();
+  this.letters.empty();
   this.canvas.clear();
   this.drawBoardLetters(context.guessWordLetters, context.hits);
   this.drawMissedLetters(context.misses);
   this.drawToStep(context.missCount);
-  this.drawWinOrLose(context.status);
+  this.drawWinOrLose(context.state);
   return this;
 };
 

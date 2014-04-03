@@ -8,9 +8,23 @@
   <script src='//localhost:35729/livereload.js'></script>
 </head>
 <body>
-  <div id='hangman' style='display:none'></div>
   <div id='mocha'></div>
   <div id='test'></div>
+  <div id="hangman" style="display:none">
+    <div id="wrap">
+      <h1>Hangman in HTML, CSS &amp; Javascript</h1>
+      <div id="canvas"></div>
+      <div id="letters"></div>
+      <div id="won"><h1>You Won!</h1></div>
+      <div id="lost"><h1>You Lost :(</h1></div>
+      <div id="input">
+        <button onclick="promptGuess()">Guess a Letter</button>
+      </div>
+      <div id="used">
+        <span id="misses"></span><span id="title">Missed Letters</span>
+      </div>
+    </div>
+  </div>
   <script src='../app/hangman.js'></script>
   <script>
   var expect = chai.expect;
@@ -19,7 +33,7 @@
   describe('Hangman', function() {
 
     beforeEach(function () {
-      guessWord = 'hangman';
+      guessWord = 'HANGMAN';
       hits = [];
       misses = [];
     });
@@ -30,44 +44,45 @@
         expect(validateGuess('')).to.be.false;
         expect(validateGuess(' ')).to.be.false;
         expect(validateGuess('aa')).to.be.false;
-        expect(validateGuess('c')).to.be.true;
-        expect(validateGuess('a')).to.be.true;
+        expect(validateGuess('C')).to.be.true;
+        guess('A');
+        expect(validateGuess('A')).to.be.false;
       });
     });
 
     describe('guess', function () {
       it('should add a valid guess to the hits array if it does appear in the guessWord', function () {
-        guess('z');
+        guess('Z');
         expect(hits).to.have.length(0);
-        guess('a');
-        expect(hits[0]).to.equal('a');
-        guess('a');
+        guess('A');
+        expect(hits[0]).to.equal('A');
+        guess('A');
         expect(hits).to.have.length(1);
       });
 
       it('should add a valid guess to the missed array if it does not appear in the guessWord', function () {
-        guess('z');
+        guess('Z');
         expect(hits).to.have.length(0);
-        guess('a');
-        expect(hits[0]).to.equal('a');
-        guess('a');
+        guess('A');
+        expect(hits[0]).to.equal('A');
+        guess('A');
         expect(hits).to.have.length(1);
       });
 
       it('should return true if the guess was a valid hit', function () {
-        expect(guess('a')).to.be.true;
-        expect(guess('a')).to.be.false;
+        expect(guess('A')).to.be.true;
+        expect(guess('A')).to.be.false;
       });
     });
 
     describe('state', function () {
       it('should return "won" if the game is in a winning state', function () {
-        hits = ['h','a','n','g','m','n'];
+        hits = ['H','A','N','G','M','A','N'];
         expect(state()).to.equal('won');
       });
       it('should return "lost" if the game is in a losing state', function () {
         hits = [];
-        misses = ['z','y','x','w','v','u','t','s'];
+        misses = ['Z','Y','X','W','V','U','T','S'];
         expect(state()).to.equal('lost');
       });
       it('should return "playing" if the game is neither lost nor won', function () {

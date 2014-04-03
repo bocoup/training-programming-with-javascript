@@ -1,4 +1,4 @@
-var words = ['abbey', 'bagpipes', 'cobweb', 'daiquiri', 'equip', 'fishhook', 'galaxy', 'haiku', 'icebox', 'jaundice', 'kazoo', 'larynx', 'marquis', 'nowadays', 'ovary', 'pajama', 'quartz', 'rhubarb', 'sphinx', 'topaz', 'unknown', 'vaporize', 'walkway', 'yippee', 'xylophone', 'zephyr'];
+var words = ['ABBEY', 'BAGPIPES', 'COBWEB', 'DAIQUIRI', 'EQUIP', 'FISHHOOK', 'GALAXY', 'HAIKU', 'ICEBOX', 'JAUNDICE', 'KAZOO', 'LARYNX', 'MARQUIS', 'NOWADAYS', 'OVARY', 'PAJAMA', 'QUARTZ', 'RHUBARB', 'SPHINX', 'TOPAZ', 'UNKNOWN', 'VAPORIZE', 'WALKWAY', 'YIPPEE', 'XYLOPHONE', 'ZEPHYR'];
 
 /**
  * Randomly select an element from a provided array.
@@ -42,7 +42,7 @@ var misses = [];
  * Implementation:
  *   1. Return false if guess is blank or undefined.
  *   2. Return false if guess is more than one character.
- *   3. Return false if guess is not a lower-case letter.
+ *   3. Return false if guess is not an upper-case letter.
  *   4. Return false if guess is has already been made.
  *   5. Return true if you made it this far, the guess is valid!
  *
@@ -63,7 +63,7 @@ var validateGuess = function (letter) {
  *   3. If letter appears in guess word, add it to hits and return true.
  *   4. Otherwise, add it to misses and return false.
  *
- * @param {String} guess
+ * @param {String} letter
  *   The letter to guess with.
  * @return {Boolean}
  */
@@ -71,11 +71,12 @@ var guess = function (letter) {
 
 };
 
+
 /**
  * Continuously update the game board.
  */
 var refresh = function () {
-  var game = document.getElementById('hangman');
+  var game = document.getElementById('canvas');
   game.innerHTML = '<u>Guess Word</u><br><strong>'+guessWord+'</strong><br><br>';
   game.innerHTML += '<u>Correct Guesses</u><br><strong>'+hits.join(', ')+'</strong><br><br>';
   game.innerHTML += '<u>Incorrect Guesses</u><br><strong>'+misses.join(', ')+'</strong><br><br>';
