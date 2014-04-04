@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel='stylesheet' href='../vendor/test/mocha.css'>
+  <script src='../vendor/test/mocha-1.17.1.js'></script>
+  <script src='../vendor/test/chai-1.9.0.js'></script>
+  <script src='../vendor/test/sinon-1.8.2.js'></script>
+  <script src="../vendor/jquery-2.1.0.js"></script>
+  <script src="../vendor/fabric-1.4.4.js"></script>
+  <script src="../app/hangman.js"></script>
+  <script src="../app/lib/model.js"></script>
+  <script src="../app/lib/view.js"></script>
+  <script src="../app/lib/controller.js"></script>
+  <script src="//localhost:35729/livereload.js"></script>
+  <script>
+  var expect = chai.expect;
+  mocha.setup('bdd');
+  $(mocha.run);
+
+  describe("Hangman.Controller", function() {
+    var board, model, view, controller;
+
+    beforeEach(function () {
+      board = $('.hangman').clone();
+      model = new Hangman.Model('hangman');
+      view = new Hangman.View(board);
+      controller = new Hangman.Controller(model, view);
+      spies = {
+        model: {
+          data: sinon.spy(model, 'data')
+        },
+        view: {
+          refreshBoard: sinon.spy(view, 'refreshBoard')
+        },
+        controller: {
+          refreshGame: sinon.spy(controller, 'refreshGame'),
+          guess: sinon.spy(controller, 'guess'),
+        }
+      };
+      controller.start();
+    });
+
+    describe('#refreshGame', function () {
+      it('should refresh the game view with data from the model', function () {
+        controller.refreshGame();
+        expect(spies.model.data.called).to.be.true;
+        expect(spies.view.refreshBoard.calledWith(model.data())).to.be.true;
+      });
+    });
+
+    describe('#guess', function () {
+      it('should send guess to model and refresh game', function () {
+        controller.guess('B');
+        expect(model.misses).to.deep.equal(['B']);
+        expect(spies.controller.refreshGame.called).to.be.true;
+      });
+    });
+
+    describe('#start', function () {
+      it('should wire guess button to controller and call refreshGame', function () {
+        expect(spies.controller.refreshGame.called).to.be.true;
+        view.guessField.val('A');
+        view.button.trigger('click');
+        expect(spies.controller.guess.called).to.be.true;
+        expect(spies.controller.guess.calledWith('A')).to.be.true;
+      });
+    });
+
+  });
+  </script>
+</head>
+<body>
+  <div id="mocha"></div>
+  <div id="test"></div>
+  <div class="hangman" style="display:none">
+    <div class="wrap">
+      <h1>Hangman in HTML, CSS &amp; Javascript</h1>
+      <div class="canvas">
+        <canvas width="580" height="450"></canvas>
+      </div>
+      <div class="letters"></div>
+      <div class="won">You Won!</div>
+      <div class="lost">You Lost :(</div>
+      <div class="input">
+        <input type="text" name="guess" class="guess" maxlength="1"><button>Guess a Letter</button>
+      </div>
+      <div class="used">
+        <span class="misses"></span><span class="title">Missed Letters</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

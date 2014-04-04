@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <link rel='stylesheet' href='../vendor/test/mocha.css'>
+  <script src='../vendor/test/mocha-1.17.1.js'></script>
+  <script src='../vendor/test/chai-1.9.0.js'></script>
+  <script src='../vendor/jquery-2.1.0.js'></script>
+  <script src='../app/main.js'></script>
+  <script src='../app/lib/model.js'></script>
+  <script src='//localhost:35729/livereload.js'></script>
+  <script>
+  var expect = chai.expect;
+  mocha.setup('bdd');
+  $(mocha.run);
+
+  describe('Hangman.Model', function() {
+    var model;
+
+    beforeEach(function () {
+      model = new Hangman.Model('HANGMAN');
+    });
+
+    describe('constructor', function () {
+      it('should create a new game state', function () {
+        expect(model.guessWord).to.be.a('string');
+        expect(model.hits).to.be.an('array');
+        expect(model.hits).to.have.length(0);
+        expect(model.misses).to.be.an('array');
+        expect(model.misses).to.have.length(0);
+        expect(model.guessWord).to.equal('HANGMAN');
+      });
+    });
+
+    describe('#guessWordLetters', function () {
+      it('should return the word to be guessed as an array of characters', function () {
+        expect(model.guessWordLetters()).to.deep.equal(model.guessWord.split(''));
+      });
+    });
+
+    describe('#guesses', function () {
+      it('should return a combination of all hits and misses', function () {
+        model.guess('A');
+        model.guess('B');
+        expect(model.guesses()).to.deep.equal(['A','B']);
+      });
+    });
+
+    describe('#validateGuess', function () {
+      it('should return true if a guess is valid', function () {
+        expect(model.validateGuess(1)).to.be.false;
+        expect(model.validateGuess('')).to.be.false;
+        expect(model.validateGuess(' ')).to.be.false;
+        expect(model.validateGuess('AA')).to.be.false;
+        model.guess('C');
+        expect(model.validateGuess('C')).to.be.false;
+        expect(model.validateGuess('A')).to.be.true;
+      });
+    });
+
+    describe('#guess', function () {
+      it('should add a valid guess to the hits array if it does appear in the guessWord', function () {
+        model.guess('Z');
+        expect(model.hits).to.have.length(0);
+        model.guess('A');
+        expect(model.hits[0]).to.equal('A');
+        model.guess('A');
+        expect(model.hits).to.have.length(1);
+      });
+
+      it('should add a valid guess to the missed array if it does not appear in the guessWord', function () {
+        model.guess('Z');
+        expect(model.hits).to.have.length(0);
+        model.guess('A');
+        expect(model.hits[0]).to.equal('A');
+        model.guess('A');
+        expect(model.hits).to.have.length(1);
+      });
+
+      it('should return true if the guess was a valid hit', function () {
+        expect(model.guess('A')).to.be.true;
+        expect(model.guess('A')).to.be.false;
+      });
+    });
+
+    describe('#won', function () {
+      it('should return true if the game is in a winning state', function () {
+        expect(model.won()).to.be.false;
+        model.hits = ['H','A','N','G','M','A','N'];
+        expect(model.won()).to.be.true;
+      });
+    });
+
+    describe('#lost', function () {
+      it('should return true if the game is in a losing state', function () {
+        model.maxMisses = 1;
+        expect(model.lost()).to.be.false;
+        model.misses = ['H'];
+        expect(model.lost()).to.be.true;
+      });
+    });
+
+    describe('#data', function () {
+      it('should return a copy of relevant model data for usage by views', function () {
+        model.guess('A');
+        model.guess('B');
+        var data = model.data();
+        expect(data.guessWordLetters).to.deep.equal(['H', 'A', 'N', 'G', 'M', 'A', 'N']);
+        expect(data.hits).to.deep.equal(['A']);
+        expect(data.misses).to.deep.equal(['B']);
+        expect(data.state).to.equal(Hangman.PLAYING);
+      });
+    });
+  });
+  </script>
+</head>
+<body>
+  <div id='mocha'></div>
+  <div id='test'></div>
+</body>
+</html>
